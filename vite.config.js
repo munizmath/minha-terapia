@@ -3,13 +3,15 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
+const basePath = process.env.BASE_URL || '/';
+
 export default defineConfig({
-  base: process.env.BASE_URL || '/',
+  base: basePath,
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      includeAssets: ['favicon.ico', 'vite.svg'],
       manifest: {
         name: 'Minha Terapia',
         short_name: 'Minha Terapia',
@@ -17,17 +19,13 @@ export default defineConfig({
         theme_color: '#009688',
         background_color: '#F5F5F5',
         display: 'standalone',
-        start_url: process.env.BASE_URL || '/',
+        start_url: basePath,
         icons: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            src: 'vite.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any maskable'
           }
         ]
       }
