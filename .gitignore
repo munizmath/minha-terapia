@@ -34,3 +34,8 @@ dist-ssr
 # OS
 Thumbs.db
 .DS_Store
+
+# Vercel
+.vercel
+
+.vercel

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Watch, Activity } from 'lucide-react';
 import { useMedications } from '../../context/MedicationContext';
-import './SubPage.css';
+import '../support/SubPage.css';
 
 const ActivityTracker = () => {
     const navigate = useNavigate();
@@ -13,7 +13,9 @@ const ActivityTracker = () => {
     const [customName, setCustomName] = useState('');
 
     const activities = [
-        'Caminhada', 'Corrida', 'Natação', 'Yoga', 'Musculação', 'Ciclismo'
+        'Caminhada', 'Corrida', 'Ciclismo', 'Natação',
+        'Musculação', 'Yoga', 'Pilates', 'Alongamento',
+        'Fisioterapia', 'Dança', 'Futebol', 'Vôlei'
     ];
 
     const handleSubmit = (e) => {

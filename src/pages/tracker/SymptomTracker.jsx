@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Smile, Frown, Meh, Activity } from 'lucide-react';
 import { useMedications } from '../../context/MedicationContext';
-import './SubPage.css';
+import '../support/SubPage.css';
 
 const SymptomTracker = () => {
     const navigate = useNavigate();
     const { addSymptom } = useMedications();
-    
+
     // Default categories from MyTherapy style
     const [selectedSymptom, setSelectedSymptom] = useState('Humor');
     const [severity, setSeverity] = useState(5); // 0-10 or 0-4 (Smiley)
     const [note, setNote] = useState('');
 
     const symptomsList = [
-        'Humor', 'Dor', 'Fadiga', 'Ansiedade', 'Qualidade do Sono'
+        'Humor', 'Dor', 'Dor de Cabeça', 'Febre', 'Náusea',
+        'Tontura', 'Cansaço', 'Ansiedade', 'Qualidade do Sono',
+        'Falta de Ar', 'Tosse', 'Dor de Garganta', 'Palpitações'
     ];
 
     const handleSubmit = (e) => {
@@ -34,16 +36,16 @@ const SymptomTracker = () => {
             return (
                 <div className="smiley-selector">
                     {[1, 2, 3, 4, 5].map(level => (
-                        <button 
-                            key={level} 
-                            type="button" 
+                        <button
+                            key={level}
+                            type="button"
                             className={`smiley-btn ${severity === level ? 'active' : ''}`}
                             onClick={() => setSeverity(level)}
                         >
                             {level === 1 ? <Frown color="#e53935" size={32} /> :
-                             level === 3 ? <Meh color="#fbc02d" size={32} /> :
-                             level === 5 ? <Smile color="#43a047" size={32} /> :
-                             <span className="dot">{level}</span>}
+                                level === 3 ? <Meh color="#fbc02d" size={32} /> :
+                                    level === 5 ? <Smile color="#43a047" size={32} /> :
+                                        <span className="dot">{level}</span>}
                         </button>
                     ))}
                     <p className="mood-label">
@@ -54,11 +56,11 @@ const SymptomTracker = () => {
         }
         return (
             <div className="slider-wrapper">
-                <input 
-                    type="range" 
-                    min="0" max="10" 
-                    value={severity} 
-                    onChange={e => setSeverity(parseInt(e.target.value))} 
+                <input
+                    type="range"
+                    min="0" max="10"
+                    value={severity}
+                    onChange={e => setSeverity(parseInt(e.target.value))}
                     className="severity-slider"
                 />
                 <div className="slider-labels">
@@ -79,13 +81,13 @@ const SymptomTracker = () => {
 
             <div className="sub-content">
                 <form onSubmit={handleSubmit} className="generic-form">
-                    
+
                     <div className="form-group">
                         <label>O que você sentiu?</label>
                         <div className="chips-container">
                             {symptomsList.map(s => (
-                                <button 
-                                    key={s} 
+                                <button
+                                    key={s}
                                     type="button"
                                     className={`choice-chip ${selectedSymptom === s ? 'active' : ''}`}
                                     onClick={() => setSelectedSymptom(s)}
@@ -103,7 +105,7 @@ const SymptomTracker = () => {
 
                     <div className="form-group">
                         <label>Notas (Opcional)</label>
-                        <textarea 
+                        <textarea
                             rows="3"
                             value={note}
                             onChange={e => setNote(e.target.value)}

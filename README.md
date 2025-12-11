@@ -2,13 +2,21 @@
 
 Aplicação web progressiva (PWA) para gerenciamento de medicamentos, medições de saúde, rastreamento de sintomas e atividades. Desenvolvida com React e Vite, oferece uma interface moderna e responsiva para auxiliar no cuidado da saúde pessoal.
 
+## 🌐 Acesso Web
+
+**Aplicação em produção:** [https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app](https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app)
+
+**Repositório GitHub:** [https://github.com/munizmath/minha-terapia](https://github.com/munizmath/minha-terapia)
+
 ## 📋 Índice
 
+- [Acesso Web](#-acesso-web)
 - [Características](#características)
 - [Tecnologias](#tecnologias)
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação](#instalação)
 - [Executando o Projeto](#executando-o-projeto)
+- [Deploy](#deploy)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Funcionalidades Principais](#funcionalidades-principais)
 - [Scripts Disponíveis](#scripts-disponíveis)
@@ -86,6 +94,41 @@ Visualiza a versão de produção localmente antes do deploy.
 npm run lint
 ```
 Executa o ESLint para verificar a qualidade do código.
+
+## 🚀 Deploy
+
+O projeto está configurado para deploy automático na **Vercel**. Cada push para a branch `main` no GitHub gera um deploy automático.
+
+### Deploy Manual via Vercel CLI
+
+1. Instale o Vercel CLI (se ainda não tiver):
+```bash
+npm i -g vercel
+```
+
+2. Faça login:
+```bash
+vercel login
+```
+
+3. Deploy para produção:
+```bash
+vercel --prod
+```
+
+### Configuração Automática
+
+O arquivo `vercel.json` já está configurado com:
+- Build command: `npm run build`
+- Output directory: `dist`
+- Framework: Vite
+- Headers de segurança (CSP, XSS Protection, etc.)
+- Rewrites para SPA (Single Page Application)
+
+### URLs
+
+- **Produção**: [https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app](https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app)
+- **GitHub**: [https://github.com/munizmath/minha-terapia](https://github.com/munizmath/minha-terapia)
 
 ## 📁 Estrutura do Projeto
 
