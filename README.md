@@ -97,9 +97,35 @@ Executa o ESLint para verificar a qualidade do código.
 
 ## 🚀 Deploy
 
-O projeto está configurado para deploy automático na **Vercel**. Cada push para a branch `main` no GitHub gera um deploy automático.
+O projeto está configurado para deploy em **duas plataformas**:
 
-### Deploy Manual via Vercel CLI
+### GitHub Pages
+
+A aplicação está configurada para deploy automático no **GitHub Pages**. Cada push para a branch `main` aciona o workflow que faz build e deploy automaticamente.
+
+**URL do GitHub Pages**: [https://munizmath.github.io/minha-terapia/](https://munizmath.github.io/minha-terapia/)
+
+#### Habilitar GitHub Pages
+
+1. Acesse o repositório: [https://github.com/munizmath/minha-terapia](https://github.com/munizmath/minha-terapia)
+2. Vá em **Settings** → **Pages**
+3. Em **Source**, selecione **GitHub Actions**
+4. O workflow `.github/workflows/deploy-gh-pages.yml` será executado automaticamente
+
+#### Workflow Automático
+
+O workflow está configurado para:
+- Build automático a cada push na branch `main`
+- Deploy automático para GitHub Pages
+- Suporte a base path `/minha-terapia/`
+
+### Vercel (Alternativa)
+
+O projeto também está configurado para deploy na **Vercel**.
+
+**URL da Vercel**: [https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app](https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app)
+
+#### Deploy Manual via Vercel CLI
 
 1. Instale o Vercel CLI (se ainda não tiver):
 ```bash
@@ -116,9 +142,9 @@ vercel login
 vercel --prod
 ```
 
-### Configuração Automática
+#### Configuração Automática
 
-O arquivo `vercel.json` já está configurado com:
+O arquivo `vercel.json` está configurado com:
 - Build command: `npm run build`
 - Output directory: `dist`
 - Framework: Vite
@@ -127,8 +153,9 @@ O arquivo `vercel.json` já está configurado com:
 
 ### URLs
 
-- **Produção**: [https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app](https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app)
-- **GitHub**: [https://github.com/munizmath/minha-terapia](https://github.com/munizmath/minha-terapia)
+- **GitHub Pages**: [https://munizmath.github.io/minha-terapia/](https://munizmath.github.io/minha-terapia/)
+- **Vercel**: [https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app](https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app)
+- **Repositório**: [https://github.com/munizmath/minha-terapia](https://github.com/munizmath/minha-terapia)
 
 ## 📁 Estrutura do Projeto
 
