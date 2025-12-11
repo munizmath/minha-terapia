@@ -13,9 +13,20 @@ const ActivityTracker = () => {
     const [customName, setCustomName] = useState('');
 
     const activities = [
+        // Básicas
         'Caminhada', 'Corrida', 'Ciclismo', 'Natação',
-        'Musculação', 'Yoga', 'Pilates', 'Alongamento',
-        'Fisioterapia', 'Dança', 'Futebol', 'Vôlei'
+
+        // Exercícios
+        'Ginástica', 'Musculação', 'Yoga', 'Pilates', 'Alongamento', 'Aeróbica',
+        'Exercícios de Respiração', 'Relaxamento',
+
+        // Terapias
+        'Fisioterapia', 'Terapia Ocupacional', 'Fonoaudiologia', 'Psicoterapia',
+
+        // Esportes / Outros
+        'Esporte', 'Dança', 'Artes Marciais', 'Esportes de Equipe',
+        'Trabalho Doméstico', 'Jardinagem', 'Caminhada com Pet',
+        'Meditação'
     ];
 
     const handleSubmit = (e) => {

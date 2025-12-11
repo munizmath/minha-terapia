@@ -10,8 +10,13 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: ['favicon.ico', 'vite.svg'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+        navigateFallback: basePath + 'index.html',
+        navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/]
+      },
       manifest: {
         name: 'Minha Terapia',
         short_name: 'Minha Terapia',
@@ -20,6 +25,7 @@ export default defineConfig({
         background_color: '#F5F5F5',
         display: 'standalone',
         start_url: basePath,
+        scope: basePath,
         icons: [
           {
             src: 'vite.svg',

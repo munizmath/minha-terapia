@@ -9,7 +9,25 @@ const MEASUREMENT_TYPES = [
     { id: 'weight', label: 'Peso Corporal', icon: Scale, unit: 'kg' },
     { id: 'heart_rate', label: 'Frequência Cardíaca', icon: Heart, unit: 'bpm' },
     { id: 'temperature', label: 'Temperatura', icon: Thermometer, unit: '°C' },
-    { id: 'glucose', label: 'Glicemia', icon: Droplet, unit: 'mg/dL' },
+    { id: 'oxygen', label: 'Saturação (SpO2)', icon: Activity, unit: '%' },
+    { id: 'laboratory', label: 'Exames Laboratoriais', icon: Droplet, unit: '-' }, // Unified Generic
+];
+
+// Sub-types for the Laboratory Panel
+const LAB_FIELDS = [
+    { id: 'glucose', label: 'Glicemia', unit: 'mg/dL' },
+    { id: 'cholesterol_total', label: 'Colesterol Total', unit: 'mg/dL' },
+    { id: 'cholesterol_hdl', label: 'Colesterol HDL', unit: 'mg/dL' },
+    { id: 'cholesterol_ldl', label: 'Colesterol LDL', unit: 'mg/dL' },
+    { id: 'triglycerides', label: 'Triglicerídeos', unit: 'mg/dL' },
+    { id: 'hba1c', label: 'Hemoglobina Glicada', unit: '%' },
+    { id: 'tsh', label: 'TSH', unit: 'mIU/L' },
+    { id: 'creatinine', label: 'Creatinina', unit: 'mg/dL' },
+    { id: 'urea', label: 'Ureia', unit: 'mg/dL' },
+    { id: 'inr', label: 'INR', unit: '' },
+    { id: 'pcr', label: 'PCR', unit: 'mg/L' },
+    { id: 'vit_d', label: 'Vitamina D', unit: 'ng/mL' },
+    { id: 'vit_b12', label: 'Vitamina B12', unit: 'pg/mL' }
 ];
 
 const AddMeasurement = () => {
@@ -17,52 +35,123 @@ const AddMeasurement = () => {
     const { addMeasurement } = useMedications();
 
     const [type, setType] = useState('blood_pressure');
-    const [values, setValues] = useState({ sys: '', dia: '', val: '' });
+
+    // State to hold all possible values. 
+    // For single types (weight, etc.), we update 'val'. 
+    // For BP, we use 'sys'/'dia'.
+    // For Lab, we use the specific keys from LAB_FIELDS.
+    const [values, setValues] = useState({});
     const [date, setDate] = useState(new Date().toISOString().slice(0, 16));
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Format payload
-        let payload = {
-            type: 'measurement',
-            subtype: type,
-            date: date,
-            unit: MEASUREMENT_TYPES.find(t => t.id === type).unit
-        };
-
-        if (type === 'blood_pressure') {
-            payload.value = `${values.sys}/${values.dia}`;
+        if (type === 'laboratory') {
+            // Save multiple entries
+            let count = 0;
+            LAB_FIELDS.forEach(field => {
+                if (values[field.id]) {
+                    addMeasurement({
+                        type: 'measurement',
+                        subtype: field.id,
+                        value: values[field.id],
+                        unit: field.unit,
+                        date: date
+                    });
+                    count++;
+                }
+            });
+            if (count === 0) return alert('Preencha pelo menos um campo.');
+            navigate('/');
         } else {
-            payload.value = values.val;
-        }
+            // Single Entry Logic
+            let payload = {
+                type: 'measurement',
+                subtype: type,
+                date: date,
+                unit: MEASUREMENT_TYPES.find(t => t.id === type).unit
+            };
 
-        addMeasurement(payload);
-        navigate('/');
+            if (type === 'blood_pressure') {
+                if (!values.sys || !values.dia) return;
+                payload.value = `${values.sys}/${values.dia}`;
+            } else {
+                if (!values.val) return;
+                payload.value = values.val;
+            }
+
+            addMeasurement(payload);
+            navigate('/');
+        }
+    };
+
+    const handleValueChange = (key, val) => {
+        setValues(prev => ({ ...prev, [key]: val }));
     };
 
     const SelectedIcon = MEASUREMENT_TYPES.find(t => t.id === type).icon;
 
+    // Render Laboratory Form
+    if (type === 'laboratory') {
+        return (
+            <div className="add-medication-page">
+                <header className="page-header">
+                    <button className="icon-btn" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
+                    <h1>Exames Laboratoriais</h1>
+                    <div style={{ width: 32 }}></div>
+                </header>
+
+                <form onSubmit={handleSubmit} className="med-form" style={{ paddingBottom: 40 }}>
+                    <div className="form-group">
+                        <label>Data dos Resultados</label>
+                        <input type="datetime-local" value={date} onChange={e => setDate(e.target.value)} required />
+                    </div>
+
+                    <p className="section-title-small">Preencha os valores disponíveis:</p>
+
+                    {LAB_FIELDS.map(field => (
+                        <div key={field.id} className="form-group small-group">
+                            <label>{field.label} <small>({field.unit})</small></label>
+                            <input
+                                type="number"
+                                step="any"
+                                placeholder="--"
+                                value={values[field.id] || ''}
+                                onChange={e => handleValueChange(field.id, e.target.value)}
+                            />
+                        </div>
+                    ))}
+
+                    <button type="submit" className="save-btn">
+                        <Save size={20} /> Salvar Tudo
+                    </button>
+                </form>
+            </div>
+        );
+    }
+
+    // Render Single Type Form
     return (
         <div className="add-medication-page">
             <header className="page-header">
-                <button className="icon-btn" onClick={() => navigate(-1)}>
-                    <ArrowLeft size={24} />
-                </button>
+                <button className="icon-btn" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
                 <h1>Nova Medida</h1>
                 <div style={{ width: 32 }}></div>
             </header>
 
             <form onSubmit={handleSubmit} className="med-form">
 
-                {/* Type Selector (Simple Tabs) */}
-                <div className="type-scroll">
+                {/* Type Selector */}
+                <div className="type-scroll" style={{ flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: 8 }}>
                     {MEASUREMENT_TYPES.map(t => (
                         <button
                             key={t.id}
                             type="button"
                             className={`type-chip ${type === t.id ? 'active' : ''}`}
-                            onClick={() => setType(t.id)}
+                            onClick={() => {
+                                setType(t.id);
+                                setValues({}); // Reset values on swap
+                            }}
                         >
                             <t.icon size={18} />
                             {t.label}
@@ -79,20 +168,19 @@ const AddMeasurement = () => {
                                 <label>Sistólica</label>
                                 <input
                                     type="number"
-                                    value={values.sys}
-                                    onChange={e => setValues({ ...values, sys: e.target.value })}
+                                    value={values.sys || ''}
+                                    onChange={e => handleValueChange('sys', e.target.value)}
                                     placeholder="120"
-                                    required
+                                    autoFocus
                                 />
                             </div>
                             <div>
                                 <label>Diastólica</label>
                                 <input
                                     type="number"
-                                    value={values.dia}
-                                    onChange={e => setValues({ ...values, dia: e.target.value })}
+                                    value={values.dia || ''}
+                                    onChange={e => handleValueChange('dia', e.target.value)}
                                     placeholder="80"
-                                    required
                                 />
                             </div>
                         </div>
@@ -101,11 +189,10 @@ const AddMeasurement = () => {
                             <label>Valor ({MEASUREMENT_TYPES.find(t => t.id === type).unit})</label>
                             <input
                                 type="number"
-                                step="0.1"
-                                value={values.val}
-                                onChange={e => setValues({ ...values, val: e.target.value })}
+                                step="any"
+                                value={values.val || ''}
+                                onChange={e => handleValueChange('val', e.target.value)}
                                 placeholder="Digite o valor"
-                                required
                                 autoFocus
                             />
                         </div>
@@ -123,8 +210,7 @@ const AddMeasurement = () => {
                 </div>
 
                 <button type="submit" className="save-btn">
-                    <Save size={20} />
-                    Salvar
+                    <Save size={20} /> Salvar
                 </button>
             </form>
         </div>
