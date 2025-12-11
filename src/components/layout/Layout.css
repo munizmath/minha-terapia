@@ -1,0 +1,6 @@
+.app-content {
+    padding-bottom: 80px;
+    /* Navbar height + extra spacing */
+    min-height: 100vh;
+    background-color: var(--color-background);
+}

@@ -1,0 +1,42 @@
+.top-bar {
+    position: sticky;
+    top: 0;
+    background-color: var(--color-background);
+    /* Or Primary if we want colored header */
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 50;
+    /* Glassmorphism optional */
+    backdrop-filter: blur(10px);
+    background-color: rgba(245, 245, 245, 0.9);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.date-display h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.date-display p {
+    margin: 4px 0 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.avatar-placeholder {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+}

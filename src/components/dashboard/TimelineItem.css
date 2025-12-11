@@ -1,0 +1,88 @@
+.timeline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    cursor: pointer;
+    padding: 0 16px;
+}
+
+.time-column {
+    width: 60px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.time-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.card {
+    flex: 1;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.timeline-item.taken .card {
+    opacity: 0.7;
+    box-shadow: none;
+    background-color: var(--color-surface-dim);
+}
+
+.timeline-item:not(.taken) .card {
+    border-left-color: var(--color-primary);
+}
+
+.card-content {
+    flex: 1;
+}
+
+.med-name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.timeline-item.taken .med-name {
+    text-decoration: line-through;
+    color: var(--color-text-secondary);
+}
+
+.med-dose {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.checkbox {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--color-text-disabled);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.timeline-item.taken .checkbox {
+    background-color: var(--color-success);
+    /* Or Primary */
+    border-color: var(--color-success);
+}
+
+.timeline-item:not(.taken) .checkbox {
+    border-color: var(--color-primary);
+}

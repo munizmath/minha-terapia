@@ -1,0 +1,16 @@
+@import './theme/variables.css';
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  /* Safe area for mobile PWA */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
