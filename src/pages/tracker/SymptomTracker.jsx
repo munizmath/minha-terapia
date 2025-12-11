@@ -43,13 +43,17 @@ const SymptomTracker = () => {
                             onClick={() => setSeverity(level)}
                         >
                             {level === 1 ? <Frown color="#e53935" size={32} /> :
-                                level === 3 ? <Meh color="#fbc02d" size={32} /> :
-                                    level === 5 ? <Smile color="#43a047" size={32} /> :
-                                        <span className="dot">{level}</span>}
+                                level === 2 ? <Frown color="#ff9800" size={32} /> :
+                                    level === 3 ? <Meh color="#fbc02d" size={32} /> :
+                                        level === 4 ? <Smile color="#8bc34a" size={32} /> :
+                                            <Smile color="#43a047" size={32} />}
                         </button>
                     ))}
                     <p className="mood-label">
-                        {severity === 1 ? 'Péssimo' : severity === 5 ? 'Excelente' : 'Regular'}
+                        {severity === 1 ? 'Péssimo' :
+                            severity === 2 ? 'Ruim' :
+                                severity === 3 ? 'Regular' :
+                                    severity === 4 ? 'Bom' : 'Excelente'}
                     </p>
                 </div>
             );
