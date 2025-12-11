@@ -4,7 +4,9 @@ Aplicação web progressiva (PWA) para gerenciamento de medicamentos, medições
 
 ## 🌐 Acesso Web
 
-**Aplicação em produção:** [https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app](https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app)
+**GitHub Pages:** [https://munizmath.github.io/minha-terapia/](https://munizmath.github.io/minha-terapia/)
+
+**Vercel (alternativa):** [https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app](https://app-m1d90czsc-matheusmuniz-2500s-projects.vercel.app)
 
 **Repositório GitHub:** [https://github.com/munizmath/minha-terapia](https://github.com/munizmath/minha-terapia)
 

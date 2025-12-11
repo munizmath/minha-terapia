@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useMedications } from '../context/MedicationContext';
+import { commonMedications } from '../data/medicationsDb';
 import './AddMedication.css';
 
 const AddMedication = () => {
@@ -45,12 +46,18 @@ const AddMedication = () => {
                     <input
                         type="text"
                         name="name"
+                        list="meds-list"
                         placeholder="Ex: Dipirona"
                         value={formData.name}
                         onChange={handleChange}
                         autoFocus
                         required
                     />
+                    <datalist id="meds-list">
+                        {commonMedications.map(med => (
+                            <option key={med} value={med} />
+                        ))}
+                    </datalist>
                 </div>
 
                 <div className="form-group">
