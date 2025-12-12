@@ -82,13 +82,55 @@ const Doctors = () => {
         }
     };
 
+    const specialties = [
+        // A
+        "Acupuntura", "Alergia e Imunologia", "Análises Clínicas", "Anatomia Patológica", "Anestesiologia", "Angiologia", "Arteterapia",
+        // B
+        "Biomedicina", "Bioquímica",
+        // C
+        "Cardiologia", "Cardiologia Pediátrica", "Cirurgia Bariátrica", "Cirurgia Buco-Maxilo-Facial", "Cirurgia Cardiovascular", "Cirurgia da Mão", "Cirurgia de Cabeça e Pescoço", "Cirurgia do Aparelho Digestivo", "Cirurgia Geral", "Cirurgia Oncológica", "Cirurgia Pediátrica", "Cirurgia Plástica", "Cirurgia Torácica", "Cirurgia Vascular", "Clínica Geral / Médica", "Coloproctologia", "Cuidador de Idosos",
+        // D
+        "Dentística (Restauradora)", "Dermatologia", "Disfunção Temporomandibular (DTM)", "Dor Orofacial", "Doula", "Drenagem Linfática",
+        // E
+        "Ecografia", "Educação Física", "Endocrinologia e Metabologia", "Endodontia (Canal)", "Endoscopia", "Enfermagem", "Estética", "Estomatologia",
+        // F
+        "Farmácia", "Fisiatria", "Fisioterapia", "Fisioterapia Dermato-Funcional", "Fisioterapia Esportiva", "Fisioterapia Neurológica", "Fisioterapia Pélvica", "Fisioterapia Respiratória", "Fonoaudiologia",
+        // G
+        "Gastroenterologia", "Genética Médica", "Geriatria", "Gerontologia", "Ginecologia e Obstetrícia",
+        // H
+        "Harmonização Orofacial", "Hematologia e Hemoterapia", "Hepatologia", "Homeopatia",
+        // I
+        "Implantodontia", "Infectologia", "Instrumentação Cirúrgica",
+        // M
+        "Mamografia", "Massoterapia", "Mastologia", "Medicina de Emergência", "Medicina de Família e Comunidade", "Medicina do Sono", "Medicina do Trabalho", "Medicina do Tráfego", "Medicina Esportiva", "Medicina Física e Reabilitação", "Medicina Hiperbárica", "Medicina Intensiva (UTI)", "Medicina Legal e Perícia", "Medicina Nuclear", "Medicina Paliativa", "Medicina Preventiva e Social", "Musicoterapia",
+        // N
+        "Naturopatia", "Nefrologia", "Neurocirurgia", "Neurologia", "Neuropediatria", "Neuropsicologia", "Nutrição", "Nutrição Clínica", "Nutrição Esportiva", "Nutrologia",
+        // O
+        "Obstetrícia", "Odontogeriatria", "Odontologia", "Odontologia do Esporte", "Odontologia do Trabalho", "Odontologia Estética", "Odontologia Hospitalar", "Odontologia Legal", "Odontologia para Pacientes Especiais", "Odontopediatria", "Oftalmologia", "Oncologia Clínica", "Optometria", "Ortodontia", "Ortopedia e Traumatologia", "Ortopedia Funcional dos Maxilares", "Ortóptica", "Osteopatia", "Otorrinolaringologia",
+        // P
+        "Patologia", "Patologia Clínica", "Patologia Oral e Maxilo Facial", "Pediatria", "Periodontia (Gengiva)", "Personal Trainer", "Pilates", "Pneumologia", "Podologia", "Prótese Buco-Maxilo-Facial", "Prótese Dentária", "Psicanálise", "Psicologia", "Psicologia Hospitalar", "Psicopedagogia", "Psiquiatria", "Psiquiatria da Infância e Adolescência",
+        // Q
+        "Quiropraxia",
+        // R
+        "Radiologia e Diagnóstico por Imagem", "Radiologia Intervencionista", "Radiologia Odontológica", "Radioterapia", "Reflexologia", "Reprodução Humana", "Reumatologia",
+        // S
+        "Saúde Coletiva", "Saúde da Família", "Sexologia",
+        // T
+        "Técnico de Enfermagem", "Terapia Holística", "Terapia Ocupacional", "Toxicologia",
+        // U
+        "Ultrassonografia", "Urologia",
+        // Y
+        "Yoga"
+    ].sort();
+
     return (
         <div className="sub-page">
             <header className="page-header">
                 <button className="icon-btn" onClick={() => isAdding ? setIsAdding(false) : navigate(-1)}>
                     <ArrowLeft size={24} />
                 </button>
-                <h1>{isAdding ? 'Novo Médico' : 'Meus Médicos'}</h1>
+                {/* Changed Title */}
+                <h1>{isAdding ? 'Novo Especialista' : 'Meus Especialistas'}</h1>
                 {!isAdding && (
                     <div style={{ display: 'flex', gap: 8 }}>
                         <button className="icon-btn" onClick={handleImport} title="Importar Contatos">
@@ -114,6 +156,7 @@ const Doctors = () => {
                                 value={formData.name}
                                 onChange={e => setFormData({ ...formData, name: e.target.value })}
                                 placeholder="Dr. Silva"
+                                autoFocus
                             />
                         </div>
                         <div className="form-group">
@@ -122,7 +165,11 @@ const Doctors = () => {
                                 value={formData.specialty}
                                 onChange={e => setFormData({ ...formData, specialty: e.target.value })}
                                 placeholder="Cardiologista"
+                                list="specialty-list"
                             />
+                            <datalist id="specialty-list">
+                                {specialties.map(s => <option key={s} value={s} />)}
+                            </datalist>
                         </div>
                         <div className="form-group">
                             <label><Phone size={16} /> Telefone</label>

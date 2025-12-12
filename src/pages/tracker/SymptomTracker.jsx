@@ -14,11 +14,20 @@ const SymptomTracker = () => {
     const [note, setNote] = useState('');
 
     const symptomsList = [
-        'Humor', 'Dor', 'Dor de Cabeça', 'Febre', 'Náusea',
-        'Tontura', 'Cansaço', 'Ansiedade', 'Qualidade do Sono',
-        'Falta de Ar', 'Tosse', 'Dor de Garganta', 'Palpitações'
+        // Geral / Dor
+        'Dor (Geral)', 'Dor de Cabeça', 'Dor Abdominal', 'Dor Articular', 'Dor de Dente', 'Dor de Estômago', 'Dor no Peito', 'Cólicas Menstruais',
+        // Digestivo
+        'Náusea', 'Vômito', 'Diarreia', 'Constipação', 'Azia Intensa', 'Arrotar', 'Enjoo', 'Perda de Apetite', 'Fome Intensa',
+        // Respiratório / Alérgico
+        'Tosse', 'Falta de Ar', 'Gripe / Resfriado', 'Coceira', 'Inchaço', 'Espirros',
+        // Neurológico / Mental
+        'Tontura', 'Convulsão', 'Perda de Consciência', 'Problemas de Concentração', 'Problemas de Memória',
+        'Insônia', 'Cansaço', 'Sonolência',
+        // Emocional
+        'Ansiedade', 'Depressão', 'Irritação', 'Estresse', 'Tristeza', 'Nervosismo', 'Chorar',
+        // Outros
+        'Febre', 'Suor Excessivo', 'Palpitações', 'Queda de Cabelo', 'Sangramento', 'Urinar com Dor', 'Urinar Frequente'
     ];
-
     const handleSubmit = (e) => {
         e.preventDefault();
         addSymptom({

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, X, Pill, Activity, Smile, Zap } from 'lucide-react';
+import { Plus, X, Pill, Activity, Smile, Zap, BookOpen } from 'lucide-react';
 import { useMedications } from '../context/MedicationContext';
 import TopBar from '../components/layout/TopBar';
 import TimelineItem from '../components/dashboard/TimelineItem';
@@ -79,6 +79,9 @@ const Dashboard = () => {
                         </button>
                         <button onClick={() => navigate('/tracker/activity')}>
                             <Zap size={20} /> Atividade Física
+                        </button>
+                        <button onClick={() => navigate('/agenda-tcc')}>
+                            <BookOpen size={20} /> Psicoterapia
                         </button>
                     </div>
                 </div>

@@ -10,24 +10,113 @@ const MEASUREMENT_TYPES = [
     { id: 'heart_rate', label: 'Frequência Cardíaca', icon: Heart, unit: 'bpm' },
     { id: 'temperature', label: 'Temperatura', icon: Thermometer, unit: '°C' },
     { id: 'oxygen', label: 'Saturação (SpO2)', icon: Activity, unit: '%' },
-    { id: 'laboratory', label: 'Exames Laboratoriais', icon: Droplet, unit: '-' }, // Unified Generic
+    { id: 'laboratory', label: 'Exames Laboratoriais', icon: Droplet, unit: '-' },
+    { id: 'body_measurements', label: 'Medidas Corporais', icon: Scale, unit: '-' }, // Unified Body
 ];
 
 // Sub-types for the Laboratory Panel
-const LAB_FIELDS = [
-    { id: 'glucose', label: 'Glicemia', unit: 'mg/dL' },
-    { id: 'cholesterol_total', label: 'Colesterol Total', unit: 'mg/dL' },
-    { id: 'cholesterol_hdl', label: 'Colesterol HDL', unit: 'mg/dL' },
-    { id: 'cholesterol_ldl', label: 'Colesterol LDL', unit: 'mg/dL' },
-    { id: 'triglycerides', label: 'Triglicerídeos', unit: 'mg/dL' },
-    { id: 'hba1c', label: 'Hemoglobina Glicada', unit: '%' },
-    { id: 'tsh', label: 'TSH', unit: 'mIU/L' },
-    { id: 'creatinine', label: 'Creatinina', unit: 'mg/dL' },
-    { id: 'urea', label: 'Ureia', unit: 'mg/dL' },
-    { id: 'inr', label: 'INR', unit: '' },
-    { id: 'pcr', label: 'PCR', unit: 'mg/L' },
-    { id: 'vit_d', label: 'Vitamina D', unit: 'ng/mL' },
-    { id: 'vit_b12', label: 'Vitamina B12', unit: 'pg/mL' }
+const LAB_SECTIONS = [
+    {
+        title: "Destaques / Comuns",
+        fields: [
+            { id: 'glucose', label: 'Glicose (Glicemia)', unit: 'mg/dL' },
+            { id: 'glucose_post', label: 'Glicemia (Pós-prandial)', unit: 'mg/dL' },
+            { id: 'hba1c', label: 'Hemoglobina Glicada (HbA1c)', unit: '%' },
+            { id: 'cholesterol_total', label: 'Colesterol Total', unit: 'mg/dL' },
+            { id: 'triglycerides', label: 'Triglicerídeos', unit: 'mg/dL' },
+            { id: 'creatinine', label: 'Creatinina', unit: 'mg/dL' },
+            { id: 'inr', label: 'INR (Coagulação)', unit: '' },
+            { id: 'ferritin', label: 'Ferritina', unit: 'ng/mL' },
+        ]
+    },
+    {
+        title: "Lipídios Detalhado",
+        fields: [
+            { id: 'cholesterol_hdl', label: 'Colesterol HDL', unit: 'mg/dL' },
+            { id: 'cholesterol_ldl', label: 'Colesterol LDL', unit: 'mg/dL' },
+            { id: 'apob', label: 'Apolipoproteína B (Apo B)', unit: 'mg/dL' },
+            { id: 'lpa', label: 'Lipoproteína Lp(a)', unit: 'mg/dL' },
+        ]
+    },
+    {
+        title: "Fígado",
+        fields: [
+            { id: 'alt', label: 'ALT (Alanina aminotransferase)', unit: 'U/L' },
+            { id: 'ast', label: 'AST (Aspartato aminotransferase)', unit: 'U/L' },
+            { id: 'ggt', label: 'GGT (Gama-glutamil transferase)', unit: 'U/L' },
+            { id: 'alp', label: 'Fosfatase Alcalina', unit: 'U/L' },
+            { id: 'bilirubin', label: 'Bilirrubina', unit: 'mg/dL' },
+            { id: 'albumin', label: 'Albumina', unit: 'g/dL' },
+        ]
+    },
+    {
+        title: "Rins e Metabolismo",
+        fields: [
+            { id: 'urea', label: 'Ureia', unit: 'mg/dL' },
+            { id: 'gfr', label: 'Taxa de Filtração Glomerular (TFG)', unit: 'mL/min' },
+            { id: 'uacr', label: 'Razão Albumina-Creatinina (uACR)', unit: 'mg/g' },
+            { id: 'uric_acid', label: 'Ácido Úrico', unit: 'mg/dL' },
+            { id: 'sodium', label: 'Sódio', unit: 'mEq/L' },
+            { id: 'potassium', label: 'Potássio', unit: 'mEq/L' },
+            { id: 'calcium', label: 'Cálcio', unit: 'mg/dL' },
+            { id: 'lactate', label: 'Lactato', unit: 'mmol/L' },
+            { id: 'glycosuria', label: 'Glicosúria', unit: '' },
+        ]
+    },
+    {
+        title: "Tireoide e Hormônios",
+        fields: [
+            { id: 'tsh', label: 'TSH', unit: 'mIU/L' },
+            { id: 't4_free', label: 'T4 Livre', unit: 'ng/dL' },
+            { id: 't3_free', label: 'T3 Livre', unit: 'pg/mL' },
+            { id: 'psa', label: 'PSA', unit: 'ng/mL' },
+        ]
+    },
+    {
+        title: "Outros / Toxicológico",
+        fields: [
+            { id: 'pcr', label: 'PCR (Proteína C Reativa)', unit: 'mg/L' },
+            { id: 'platelets', label: 'Plaquetas', unit: 'mil/mm³' },
+            { id: 'cd4', label: 'CD4', unit: 'cél/mm³' },
+            { id: 'viral_load', label: 'Carga Viral', unit: 'cópias/mL' },
+            { id: 'vit_d', label: 'Vitamina D', unit: 'ng/mL' },
+            { id: 'ck', label: 'Creatina Quinase (CK)', unit: 'U/L' },
+            { id: 'lithium', label: 'Nível de Lítio', unit: 'mEq/L' },
+            { id: 'alcohol_level', label: 'Nível de Álcool', unit: 'g/L' },
+            { id: 'nicotine', label: 'Nicotina', unit: 'ng/mL' },
+            { id: 'antifactor_xa', label: 'Anti-fator Xa', unit: 'UI/mL' },
+        ]
+    }
+];
+
+const BODY_SECTIONS = [
+    {
+        title: "Circunferências",
+        fields: [
+            { id: 'waist_circ', label: 'Cintura', unit: 'cm' },
+            { id: 'chest_circ', label: 'Peito', unit: 'cm' },
+            { id: 'biceps_circ', label: 'Bíceps', unit: 'cm' },
+            { id: 'thigh_circ', label: 'Coxa (Meio)', unit: 'cm' },
+        ]
+    },
+    {
+        title: "Composição Corporal",
+        fields: [
+            { id: 'body_fat', label: '% Gordura Corporal', unit: '%' },
+            { id: 'body_water', label: '% Água Corporal', unit: '%' },
+            { id: 'bone_density', label: 'Densidade Óssea', unit: 'g/cm²' },
+            { id: 'bmr', label: 'Taxa Metabólica Basal', unit: 'kcal' },
+        ]
+    },
+    {
+        title: "Função Respiratória",
+        fields: [
+            { id: 'resp_rate', label: 'Frequência Respiratória', unit: 'rpm' },
+            { id: 'pef', label: 'Pico de Fluxo Expiratório (PFE)', unit: 'L/min' },
+            { id: 'vital_capacity', label: 'Capacidade Vital', unit: 'L' },
+            { id: 'resp_volume', label: 'Volume da Respiração', unit: 'L' },
+        ]
+    }
 ];
 
 const AddMeasurement = () => {
@@ -46,22 +135,25 @@ const AddMeasurement = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (type === 'laboratory') {
+        if (type === 'laboratory' || type === 'body_measurements') {
+            const sections = type === 'laboratory' ? LAB_SECTIONS : BODY_SECTIONS;
             // Save multiple entries
             let count = 0;
-            LAB_FIELDS.forEach(field => {
-                if (values[field.id]) {
-                    addMeasurement({
-                        type: 'measurement',
-                        subtype: field.id,
-                        value: values[field.id],
-                        unit: field.unit,
-                        date: date
-                    });
-                    count++;
-                }
+            sections.forEach(section => {
+                section.fields.forEach(field => {
+                    if (values[field.id]) {
+                        addMeasurement({
+                            type: 'measurement',
+                            subtype: field.id,
+                            value: values[field.id],
+                            unit: field.unit,
+                            date: date
+                        });
+                        count++;
+                    }
+                });
             });
-            if (count === 0) return alert('Preencha pelo menos um campo.');
+            if (count === 0) return alert('Preencha pelo menos um campo para salvar.');
             navigate('/');
         } else {
             // Single Entry Logic
@@ -91,34 +183,40 @@ const AddMeasurement = () => {
 
     const SelectedIcon = MEASUREMENT_TYPES.find(t => t.id === type).icon;
 
-    // Render Laboratory Form
-    if (type === 'laboratory') {
+    // Render Laboratory or Body Form (Unified)
+    if (type === 'laboratory' || type === 'body_measurements') {
+        const sections = type === 'laboratory' ? LAB_SECTIONS : BODY_SECTIONS;
+        const title = type === 'laboratory' ? 'Exames Laboratoriais' : 'Medidas Corporais';
+
         return (
             <div className="add-medication-page">
                 <header className="page-header">
                     <button className="icon-btn" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-                    <h1>Exames Laboratoriais</h1>
+                    <h1>{title}</h1>
                     <div style={{ width: 32 }}></div>
                 </header>
 
                 <form onSubmit={handleSubmit} className="med-form" style={{ paddingBottom: 40 }}>
                     <div className="form-group">
-                        <label>Data dos Resultados</label>
+                        <label>Data</label>
                         <input type="datetime-local" value={date} onChange={e => setDate(e.target.value)} required />
                     </div>
 
-                    <p className="section-title-small">Preencha os valores disponíveis:</p>
-
-                    {LAB_FIELDS.map(field => (
-                        <div key={field.id} className="form-group small-group">
-                            <label>{field.label} <small>({field.unit})</small></label>
-                            <input
-                                type="number"
-                                step="any"
-                                placeholder="--"
-                                value={values[field.id] || ''}
-                                onChange={e => handleValueChange(field.id, e.target.value)}
-                            />
+                    {sections.map((section, idx) => (
+                        <div key={idx} style={{ marginBottom: 24 }}>
+                            <p className="section-title-small" style={{ marginBottom: 12, fontWeight: 600 }}>{section.title}</p>
+                            {section.fields.map(field => (
+                                <div key={field.id} className="form-group small-group">
+                                    <label>{field.label} <small>({field.unit})</small></label>
+                                    <input
+                                        type="number"
+                                        step="any"
+                                        placeholder="--"
+                                        value={values[field.id] || ''}
+                                        onChange={e => handleValueChange(field.id, e.target.value)}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     ))}
 

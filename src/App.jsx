@@ -15,6 +15,10 @@ import EmergencyContacts from './pages/support/EmergencyContacts';
 import UserProfile from './pages/support/UserProfile';
 import SymptomTracker from './pages/tracker/SymptomTracker';
 import ActivityTracker from './pages/tracker/ActivityTracker';
+import TccAgenda from './pages/TccAgenda';
+import HabitFrequency from './pages/psicoterapia/HabitFrequency';
+import ThoughtRecord from './pages/psicoterapia/ThoughtRecord';
+import CopingCards from './pages/psicoterapia/CopingCards';
 import './components/layout/Layout.css';
 
 function App() {
@@ -38,6 +42,10 @@ function App() {
           <Route path="medications/add" element={<AddMedication />} />
           <Route path="measurements/add" element={<AddMeasurement />} />
           <Route path="progress" element={<Progress />} />
+          <Route path="agenda-tcc" element={<TccAgenda />} />
+          <Route path="psicoterapia/habits" element={<HabitFrequency />} />
+          <Route path="psicoterapia/thoughts" element={<ThoughtRecord />} />
+          <Route path="psicoterapia/cards" element={<CopingCards />} />
           <Route path="support" element={<Support />} />
           <Route path="support/doctors" element={<Doctors />} />
           <Route path="support/data" element={<DataManagement />} />

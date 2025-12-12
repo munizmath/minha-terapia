@@ -13,20 +13,22 @@ const ActivityTracker = () => {
     const [customName, setCustomName] = useState('');
 
     const activities = [
-        // Básicas
-        'Caminhada', 'Corrida', 'Ciclismo', 'Natação',
-
         // Exercícios
-        'Ginástica', 'Musculação', 'Yoga', 'Pilates', 'Alongamento', 'Aeróbica',
-        'Exercícios de Respiração', 'Relaxamento',
+        'Caminhar', 'Exercício Leve', 'Exercício Moderado', 'Exercício Pesado',
+        'Exercício de Força', 'Exercício de Resistência', 'Alongamento', 'Exercício Respiratório',
+        'Fisioterapia', 'Meditação', 'Yoga', 'Pilates',
 
-        // Terapias
-        'Fisioterapia', 'Terapia Ocupacional', 'Fonoaudiologia', 'Psicoterapia',
+        // Diário / Casa
+        'Limpar Casa', 'Cozinhar', 'Ler', 'Dormir', 'Banho', 'Escovação de Dentes', 'Uso do Fio Dental',
 
-        // Esportes / Outros
-        'Esporte', 'Dança', 'Artes Marciais', 'Esportes de Equipe',
-        'Trabalho Doméstico', 'Jardinagem', 'Caminhada com Pet',
-        'Meditação'
+        // Alimentação / Hábitos
+        'Alimentação', 'Alimentação Inadequada', 'Beber Água', 'Beber Café', 'Beber Chá', 'Beber Refrigerante', 'Beber Álcool', 'Fumar',
+
+        // Saúde / Tratamentos
+        'Tomar Medicação', 'Tomar Remédio Extra (SOS)', 'Tratamento Tópico (Creme)', 'Tratamento Injetável', 'Tratamento Intravenoso', 'Vacinação', 'Menstruação',
+
+        // Outros
+        'Exposição ao Sol', 'Exposição ao Calor', 'Exposição ao Frio', 'Sexualidade', 'Amamentar'
     ];
 
     const handleSubmit = (e) => {

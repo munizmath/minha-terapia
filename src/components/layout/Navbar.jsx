@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { CalendarCheck, Pill, BarChart3, Users } from 'lucide-react';
+import { CalendarCheck, Pill, BarChart3, Users, BookOpen } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -19,7 +19,15 @@ const Navbar = () => {
                 className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             >
                 <Pill size={24} />
-                <span>Terapia</span>
+                <span>Medicamentos</span>
+            </NavLink>
+
+            <NavLink
+                to="/agenda-tcc"
+                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            >
+                <BookOpen size={24} />
+                <span>Psicoterapia</span>
             </NavLink>
 
             <NavLink

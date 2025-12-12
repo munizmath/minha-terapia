@@ -32,7 +32,7 @@ const Support = () => {
                     >
                         <div className="icon-box blue"><Users size={20} /></div>
                         <div className="menu-text">
-                            <h3>Médicos</h3>
+                            <h3>Saúde - Especialistas</h3>
                             <p>Gerencie seus contatos médicos</p>
                         </div>
                         <ChevronRight size={20} className="chevron" />
