@@ -19,7 +19,9 @@ import TccAgenda from './pages/TccAgenda';
 import HabitFrequency from './pages/psicoterapia/HabitFrequency';
 import ThoughtRecord from './pages/psicoterapia/ThoughtRecord';
 import CopingCards from './pages/psicoterapia/CopingCards';
+import AbcRecord from './pages/psicoterapia/AbcRecord'; 
 import './components/layout/Layout.css';
+
 
 function App() {
   // Apply theme on load
@@ -46,6 +48,7 @@ function App() {
           <Route path="psicoterapia/habits" element={<HabitFrequency />} />
           <Route path="psicoterapia/thoughts" element={<ThoughtRecord />} />
           <Route path="psicoterapia/cards" element={<CopingCards />} />
+          <Route path="psicoterapia/abc" element={<AbcRecord />} />
           <Route path="support" element={<Support />} />
           <Route path="support/doctors" element={<Doctors />} />
           <Route path="support/data" element={<DataManagement />} />
@@ -55,6 +58,7 @@ function App() {
           <Route path="support/profile" element={<UserProfile />} />
           <Route path="tracker/symptom" element={<SymptomTracker />} />
           <Route path="tracker/activity" element={<ActivityTracker />} />
+          
         </Route>
       </Routes>
     </BrowserRouter>
