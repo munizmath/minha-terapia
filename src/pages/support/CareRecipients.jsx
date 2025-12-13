@@ -13,17 +13,32 @@ const CareRecipients = () => {
 
     const [showAdd, setShowAdd] = useState(false);
     const [newName, setNewName] = useState('');
+    const [editingId, setEditingId] = useState(null);
 
     useEffect(() => {
         localStorage.setItem('care_recipients', JSON.stringify(recipients));
     }, [recipients]);
 
-    const addRecipient = (e) => {
+    const handleSave = (e) => {
         e.preventDefault();
         if (!newName) return;
-        setRecipients([...recipients, { id: uuidv4(), name: newName }]);
+
+        if (editingId) {
+            setRecipients(recipients.map(r => r.id === editingId ? { ...r, name: newName } : r));
+        } else {
+            setRecipients([...recipients, { id: uuidv4(), name: newName }]);
+        }
+
         setNewName('');
+        setEditingId(null);
         setShowAdd(false);
+    };
+
+    const editRecipient = (r) => {
+        if (r.id === 'me') return;
+        setNewName(r.name);
+        setEditingId(r.id);
+        setShowAdd(true);
     };
 
     const removeRecipient = (id) => {
@@ -54,8 +69,9 @@ const CareRecipients = () => {
                             <div className="contact-icon">
                                 <User size={24} color="var(--color-primary-dark)" />
                             </div>
-                            <div className="contact-info">
+                            <div className="contact-info" onClick={() => editRecipient(r)} style={{ cursor: 'pointer' }}>
                                 <h3>{r.name}</h3>
+                                {r.id !== 'me' && <p className="specialty" style={{ fontSize: 11 }}>Toque para editar</p>}
                             </div>
                             {r.id !== 'me' && (
                                 <button className="delete-mini" onClick={() => removeRecipient(r.id)}>
@@ -67,8 +83,8 @@ const CareRecipients = () => {
                 </div>
 
                 {showAdd ? (
-                    <form onSubmit={addRecipient} className="generic-form" style={{ marginTop: 16 }}>
-                        <h3>Novo Dependente</h3>
+                    <form onSubmit={handleSave} className="generic-form" style={{ marginTop: 16 }}>
+                        <h3>{editingId ? 'Editar Nome' : 'Novo Dependente'}</h3>
                         <input
                             type="text"
                             placeholder="Nome da pessoa"
@@ -77,12 +93,12 @@ const CareRecipients = () => {
                             autoFocus
                         />
                         <div style={{ display: 'flex', gap: 8 }}>
-                            <button type="button" className="action-btn secondary" onClick={() => setShowAdd(false)}>Cancelar</button>
+                            <button type="button" className="action-btn secondary" onClick={() => { setShowAdd(false); setEditingId(null); setNewName(''); }}>Cancelar</button>
                             <button type="submit" className="action-btn primary">Salvar</button>
                         </div>
                     </form>
                 ) : (
-                    <button className="action-btn primary" onClick={() => setShowAdd(true)} style={{ marginTop: 24, justifyContent: 'center' }}>
+                    <button className="action-btn primary" onClick={() => { setNewName(''); setEditingId(null); setShowAdd(true); }} style={{ marginTop: 24, justifyContent: 'center' }}>
                         <Plus size={24} /> Adicionar Pessoa
                     </button>
                 )}

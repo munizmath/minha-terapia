@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Repeat, BookOpen, Layers } from 'lucide-react';
-import './support/SubPage.css';
+import { Calendar, Repeat, BookOpen, Layers, GitCommit } from 'lucide-react';
+import './Support.css';
 
 const TccAgenda = () => {
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ const TccAgenda = () => {
                     <div className="menu-item" onClick={() => navigate('/psicoterapia/habits')}>
                         <div className="icon-box blue"><Repeat size={20} /></div>
                         <div className="menu-text">
-                            <h3>R.F.H.</h3>
+                            <h3>Frequência de Hábitos</h3>
                             <p>Registro de Frequência de Hábitos</p>
                         </div>
                     </div>
@@ -25,8 +25,16 @@ const TccAgenda = () => {
                     <div className="menu-item" onClick={() => navigate('/psicoterapia/thoughts')}>
                         <div className="icon-box purple"><BookOpen size={20} /></div>
                         <div className="menu-text">
-                            <h3>R.P.D.</h3>
+                            <h3>Pensamentos Disfuncionais</h3>
                             <p>Registro de Pensamentos Disfuncionais</p>
+                        </div>
+                    </div>
+                    <div className="divider"></div>
+                    <div className="menu-item" onClick={() => navigate('/psicoterapia/abc')}>
+                        <div className="icon-box green"><GitCommit size={20} /></div>
+                        <div className="menu-text">
+                            <h3>Registro ABC</h3>
+                            <p>Antecedente, Comportamento, Consequência</p>
                         </div>
                     </div>
                     <div className="divider"></div>

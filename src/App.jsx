@@ -7,7 +7,7 @@ import AddMedication from './pages/AddMedication';
 import AddMeasurement from './pages/AddMeasurement';
 import Progress from './pages/Progress';
 import Support from './pages/Support';
-import Doctors from './pages/support/Doctors';
+import Specialists from './pages/support/Specialists';
 import DataManagement from './pages/support/DataManagement';
 import Settings from './pages/support/SettingsPage';
 import CareRecipients from './pages/support/CareRecipients';
@@ -19,6 +19,7 @@ import TccAgenda from './pages/TccAgenda';
 import HabitFrequency from './pages/psicoterapia/HabitFrequency';
 import ThoughtRecord from './pages/psicoterapia/ThoughtRecord';
 import CopingCards from './pages/psicoterapia/CopingCards';
+import AbcRecord from './pages/psicoterapia/AbcRecord';
 import './components/layout/Layout.css';
 
 function App() {
@@ -42,12 +43,13 @@ function App() {
           <Route path="medications/add" element={<AddMedication />} />
           <Route path="measurements/add" element={<AddMeasurement />} />
           <Route path="progress" element={<Progress />} />
-          <Route path="agenda-tcc" element={<TccAgenda />} />
+          <Route path="psicoterapia" element={<TccAgenda />} />
           <Route path="psicoterapia/habits" element={<HabitFrequency />} />
           <Route path="psicoterapia/thoughts" element={<ThoughtRecord />} />
           <Route path="psicoterapia/cards" element={<CopingCards />} />
+          <Route path="psicoterapia/abc" element={<AbcRecord />} />
           <Route path="support" element={<Support />} />
-          <Route path="support/doctors" element={<Doctors />} />
+          <Route path="support/specialists" element={<Specialists />} />
           <Route path="support/data" element={<DataManagement />} />
           <Route path="support/settings" element={<Settings />} />
           <Route path="support/care-recipients" element={<CareRecipients />} />

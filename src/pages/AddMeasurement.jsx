@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Activity, Scale, Heart, Thermometer, Droplet } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { ArrowLeft, Save, Activity, Scale, Heart, Thermometer, Droplet, AlertCircle } from 'lucide-react';
 import { useMedications } from '../context/MedicationContext';
 import './AddMedication.css'; // Reusing styles
 
@@ -91,12 +91,51 @@ const LAB_SECTIONS = [
 
 const BODY_SECTIONS = [
     {
-        title: "Circunferências",
+        title: "Cabeça e Pescoço",
         fields: [
-            { id: 'waist_circ', label: 'Cintura', unit: 'cm' },
-            { id: 'chest_circ', label: 'Peito', unit: 'cm' },
-            { id: 'biceps_circ', label: 'Bíceps', unit: 'cm' },
-            { id: 'thigh_circ', label: 'Coxa (Meio)', unit: 'cm' },
+            { id: 'head_circ', label: 'Cabeça', unit: 'cm', info: 'Circunferência máxima da cabeça, acima da sobrancelha e na parte de trás.' },
+            { id: 'neck_circ', label: 'Pescoço', unit: 'cm', info: 'Perpendicularmente ao eixo longitudinal do pescoço, acima da laringe.' }
+        ]
+    },
+    {
+        title: "Tronco",
+        fields: [
+            { id: 'chest_circ_axilla', label: 'Tórax (Axilar)', unit: 'cm', info: 'Logo abaixo da dobra axilar.' },
+            { id: 'chest_circ_nipple', label: 'Tórax (Mamilo)', unit: 'cm', info: 'Ao nível do mamilo.' },
+            { id: 'chest_circ_xiphoid', label: 'Tórax (Xifoide)', unit: 'cm', info: 'No processo xifoide (osso no centro do peito).' },
+            { id: 'waist_circ', label: 'Cintura', unit: 'cm', info: 'Parte mais estreita, entre a última costela e o osso do quadril.' },
+            { id: 'abdomen_circ', label: 'Abdômen', unit: 'cm', info: 'Altura do umbigo.' },
+            { id: 'hip_circ', label: 'Quadril (Glúteo)', unit: 'cm', info: 'Maior protuberância dos glúteos.' },
+        ]
+    },
+    {
+        title: "Membros Superiores",
+        fields: [
+            { id: 'arm_left', label: 'Braço Esq. (Bíceps)', unit: 'cm', info: 'Parte média do braço relaxado.' },
+            { id: 'arm_right', label: 'Braço Dir. (Bíceps)', unit: 'cm', info: 'Parte média do braço relaxado.' },
+            { id: 'forearm_left', label: 'Antebraço Esq.', unit: 'cm', info: 'Terço superior, circunferência máxima.' },
+            { id: 'forearm_right', label: 'Antebraço Dir.', unit: 'cm', info: 'Terço superior, circunferência máxima.' },
+            { id: 'wrist_left', label: 'Punho Esq.', unit: 'cm', info: 'Distal ao ossinho do pulso.' },
+            { id: 'wrist_right', label: 'Punho Dir.', unit: 'cm', info: 'Distal ao ossinho do pulso.' },
+            { id: 'hand_left', label: 'Mão Esq.', unit: 'cm', info: 'Ao redor da palma, abaixo dos dedos, sem polegar.' },
+            { id: 'hand_right', label: 'Mão Dir.', unit: 'cm', info: 'Ao redor da palma, abaixo dos dedos, sem polegar.' },
+        ]
+    },
+    {
+        title: "Membros Inferiores",
+        fields: [
+            { id: 'thigh_glute_left', label: 'Coxa Sup. Esq.', unit: 'cm', info: '1cm abaixo da prega do glúteo.' },
+            { id: 'thigh_glute_right', label: 'Coxa Sup. Dir.', unit: 'cm', info: '1cm abaixo da prega do glúteo.' },
+            { id: 'thigh_mid_left', label: 'Coxa Média Esq.', unit: 'cm', info: 'Meio da coxa.' },
+            { id: 'thigh_mid_right', label: 'Coxa Média Dir.', unit: 'cm', info: 'Meio da coxa.' },
+            { id: 'knee_left', label: 'Joelho Esq.', unit: 'cm', info: 'Nível da patela (joelho).' },
+            { id: 'knee_right', label: 'Joelho Dir.', unit: 'cm', info: 'Nível da patela (joelho).' },
+            { id: 'calf_left', label: 'Panturrilha Esq.', unit: 'cm', info: 'Parte mais volumosa.' },
+            { id: 'calf_right', label: 'Panturrilha Dir.', unit: 'cm', info: 'Parte mais volumosa.' },
+            { id: 'ankle_left', label: 'Tornozelo Esq.', unit: 'cm', info: 'Parte mais fina, acima do ossinho.' },
+            { id: 'ankle_right', label: 'Tornozelo Dir.', unit: 'cm', info: 'Parte mais fina, acima do ossinho.' },
+            { id: 'foot_left', label: 'Pé Esq.', unit: 'cm', info: 'Circunferência do arco do pé.' },
+            { id: 'foot_right', label: 'Pé Dir.', unit: 'cm', info: 'Circunferência do arco do pé.' },
         ]
     },
     {
@@ -107,30 +146,32 @@ const BODY_SECTIONS = [
             { id: 'bone_density', label: 'Densidade Óssea', unit: 'g/cm²' },
             { id: 'bmr', label: 'Taxa Metabólica Basal', unit: 'kcal' },
         ]
-    },
-    {
-        title: "Função Respiratória",
-        fields: [
-            { id: 'resp_rate', label: 'Frequência Respiratória', unit: 'rpm' },
-            { id: 'pef', label: 'Pico de Fluxo Expiratório (PFE)', unit: 'L/min' },
-            { id: 'vital_capacity', label: 'Capacidade Vital', unit: 'L' },
-            { id: 'resp_volume', label: 'Volume da Respiração', unit: 'L' },
-        ]
     }
 ];
 
 const AddMeasurement = () => {
-    const navigate = useNavigate();
-    const { addMeasurement } = useMedications();
+    const location = useLocation();
+    const { addMeasurement, updateMeasurement } = useMedications();
+    const editingMeas = location.state?.measurement;
 
     const [type, setType] = useState('blood_pressure');
-
-    // State to hold all possible values. 
-    // For single types (weight, etc.), we update 'val'. 
-    // For BP, we use 'sys'/'dia'.
-    // For Lab, we use the specific keys from LAB_FIELDS.
     const [values, setValues] = useState({});
     const [date, setDate] = useState(new Date().toISOString().slice(0, 16));
+
+    // Effect to pre-fill data if editing
+    useEffect(() => {
+        if (editingMeas) {
+            setType(editingMeas.subtype);
+            setDate(editingMeas.date.slice(0, 16));
+
+            if (editingMeas.subtype === 'blood_pressure') {
+                const [sys, dia] = editingMeas.value.split('/');
+                setValues({ sys, dia });
+            } else {
+                setValues({ val: editingMeas.value });
+            }
+        }
+    }, [editingMeas]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -172,7 +213,11 @@ const AddMeasurement = () => {
                 payload.value = values.val;
             }
 
-            addMeasurement(payload);
+            if (editingMeas) {
+                updateMeasurement(editingMeas.id, payload);
+            } else {
+                addMeasurement(payload);
+            }
             navigate('/');
         }
     };
@@ -207,7 +252,19 @@ const AddMeasurement = () => {
                             <p className="section-title-small" style={{ marginBottom: 12, fontWeight: 600 }}>{section.title}</p>
                             {section.fields.map(field => (
                                 <div key={field.id} className="form-group small-group">
-                                    <label>{field.label} <small>({field.unit})</small></label>
+                                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+                                        <label style={{ margin: 0 }}>{field.label} <small>({field.unit})</small></label>
+                                        {field.info && (
+                                            <div className="info-tooltip" style={{ marginLeft: 6, cursor: 'help' }} title={field.info}>
+                                                <AlertCircle size={14} color="#888" />
+                                            </div>
+                                        )}
+                                    </div>
+                                    {field.info && (
+                                        <div style={{ fontSize: 11, color: '#666', marginBottom: 4, lineHeight: 1.2 }}>
+                                            {field.info}
+                                        </div>
+                                    )}
                                     <input
                                         type="number"
                                         step="any"
@@ -233,29 +290,31 @@ const AddMeasurement = () => {
         <div className="add-medication-page">
             <header className="page-header">
                 <button className="icon-btn" onClick={() => navigate(-1)}><ArrowLeft size={24} /></button>
-                <h1>Nova Medida</h1>
+                <h1>{editingMeas ? 'Editar Medida' : 'Nova Medida'}</h1>
                 <div style={{ width: 32 }}></div>
             </header>
 
             <form onSubmit={handleSubmit} className="med-form">
 
-                {/* Type Selector */}
-                <div className="type-scroll" style={{ flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: 8 }}>
-                    {MEASUREMENT_TYPES.map(t => (
-                        <button
-                            key={t.id}
-                            type="button"
-                            className={`type-chip ${type === t.id ? 'active' : ''}`}
-                            onClick={() => {
-                                setType(t.id);
-                                setValues({}); // Reset values on swap
-                            }}
-                        >
-                            <t.icon size={18} />
-                            {t.label}
-                        </button>
-                    ))}
-                </div>
+                {/* Type Selector (Hide if editing to avoid confusion) */}
+                {!editingMeas && (
+                    <div className="type-scroll" style={{ flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: 8 }}>
+                        {MEASUREMENT_TYPES.map(t => (
+                            <button
+                                key={t.id}
+                                type="button"
+                                className={`type-chip ${type === t.id ? 'active' : ''}`}
+                                onClick={() => {
+                                    setType(t.id);
+                                    setValues({}); // Reset values on swap
+                                }}
+                            >
+                                <t.icon size={18} />
+                                {t.label}
+                            </button>
+                        ))}
+                    </div>
+                )}
 
                 <div className="form-group" style={{ marginTop: 24, textAlign: 'center' }}>
                     <SelectedIcon size={48} color="var(--color-primary)" style={{ marginBottom: 16 }} />

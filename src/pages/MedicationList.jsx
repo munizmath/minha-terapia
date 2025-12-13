@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Pill, Trash2, AlertCircle } from 'lucide-react';
+import { Plus, Pill, Trash2, AlertCircle, Edit2 } from 'lucide-react';
 import { useMedications } from '../context/MedicationContext';
+import { generateDailySchedule } from '../utils/scheduler';
 import './MedicationList.css';
 
 const MedicationList = () => {
@@ -34,23 +35,44 @@ const MedicationList = () => {
                         <div key={med.id} className="med-card">
                             <div className="med-info">
                                 <h3>{med.name}</h3>
-                                <p className="med-details">{med.dosage} • {med.time}</p>
+                                <div className="med-schedule-details" style={{ marginTop: 4 }}>
+                                    {(() => {
+                                        const schedule = generateDailySchedule([med], new Date());
+                                        const times = schedule.map(s => s.time).sort().join(' - ');
+                                        return (
+                                            <p className="med-times" style={{ fontSize: '13px', color: '#555', marginBottom: 4 }}>
+                                                • {times}
+                                            </p>
+                                        );
+                                    })()}
+                                </div>
+                                <p className="med-details" style={{ fontSize: '12px', color: '#888' }}>{med.dosage}</p>
+
                                 {med.stock !== undefined && (
-                                    <div className={`stock-badge ${med.stock < 5 ? 'low' : ''}`}>
+                                    <div className={`stock-badge ${med.stock < 5 ? 'low' : ''}`} style={{ marginTop: 8 }}>
                                         {med.stock < 5 && <AlertCircle size={12} />}
                                         <span>Estoque: {med.stock}</span>
                                     </div>
                                 )}
                             </div>
-                            <button
-                                className="delete-btn"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDelete(med.id, med.name);
-                                }}
-                            >
-                                <Trash2 size={20} />
-                            </button>
+                            <div className="card-actions">
+                                <button
+                                    className="edit-btn"
+                                    onClick={() => navigate('/medications/add', { state: { med } })}
+                                    style={{ marginRight: 8, background: 'none', border: 'none', cursor: 'pointer' }}
+                                >
+                                    <Edit2 size={20} color="#666" />
+                                </button>
+                                <button
+                                    className="delete-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDelete(med.id, med.name);
+                                    }}
+                                >
+                                    <Trash2 size={20} color="#ff5252" />
+                                </button>
+                            </div>
                         </div>
                     ))
                 )}

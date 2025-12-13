@@ -23,7 +23,7 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
-                to="/agenda-tcc"
+                to="/psicoterapia"
                 className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
             >
                 <BookOpen size={24} />

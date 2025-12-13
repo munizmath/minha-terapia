@@ -12,7 +12,7 @@ const EmergencyContacts = () => {
     });
 
     const [showAdd, setShowAdd] = useState(false);
-    const [newContact, setNewContact] = useState({ name: '', phone: '' });
+    const [newContact, setNewContact] = useState({ id: null, name: '', phone: '' });
 
     useEffect(() => {
         localStorage.setItem('emergency_contacts', JSON.stringify(contacts));
@@ -22,9 +22,19 @@ const EmergencyContacts = () => {
         e.preventDefault();
         if (!newContact.name || !newContact.phone) return;
 
-        setContacts([...contacts, { ...newContact, id: uuidv4() }]);
-        setNewContact({ name: '', phone: '' });
+        if (newContact.id) {
+            setContacts(contacts.map(c => c.id === newContact.id ? newContact : c));
+        } else {
+            setContacts([...contacts, { ...newContact, id: uuidv4() }]);
+        }
+
+        setNewContact({ id: null, name: '', phone: '' });
         setShowAdd(false);
+    };
+
+    const editContact = (contact) => {
+        setNewContact(contact);
+        setShowAdd(true);
     };
 
     const removeContact = (id) => {
@@ -86,7 +96,7 @@ const EmergencyContacts = () => {
                             <a href={`tel:${c.phone}`} className="contact-icon" style={{ backgroundColor: '#ffebee' }}>
                                 <Phone size={24} color="#d32f2f" />
                             </a>
-                            <div className="contact-info">
+                            <div className="contact-info" onClick={() => editContact(c)} style={{ cursor: 'pointer' }}>
                                 <h3>{c.name}</h3>
                                 <p className="specialty">{c.phone}</p>
                             </div>
@@ -99,7 +109,7 @@ const EmergencyContacts = () => {
 
                 {showAdd ? (
                     <form onSubmit={handleSave} className="generic-form" style={{ marginTop: 16 }}>
-                        <h3>Novo Contato</h3>
+                        <h3>{newContact.id ? 'Editar Contato' : 'Novo Contato'}</h3>
                         <input
                             type="text"
                             placeholder="Nome (Ex: Ambulância, Filho)"
@@ -114,13 +124,13 @@ const EmergencyContacts = () => {
                             onChange={e => setNewContact({ ...newContact, phone: e.target.value })}
                         />
                         <div style={{ display: 'flex', gap: 8 }}>
-                            <button type="button" className="action-btn secondary" onClick={() => setShowAdd(false)}>Cancelar</button>
+                            <button type="button" className="action-btn secondary" onClick={() => { setShowAdd(false); setNewContact({ id: null, name: '', phone: '' }); }}>Cancelar</button>
                             <button type="submit" className="action-btn primary">Salvar</button>
                         </div>
                     </form>
                 ) : (
                     <div className="action-buttons-stack">
-                        <button className="action-btn primary" onClick={() => setShowAdd(true)}>
+                        <button className="action-btn primary" onClick={() => { setNewContact({ id: null, name: '', phone: '' }); setShowAdd(true); }}>
                             <div className="icon-box">
                                 <Plus size={24} />
                             </div>

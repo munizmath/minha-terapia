@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Edit2, Save } from 'lucide-react';
 import '../support/SubPage.css';
 
 const CopingCards = () => {
@@ -10,17 +10,28 @@ const CopingCards = () => {
         return saved ? JSON.parse(saved) : [];
     });
     const [isAdding, setIsAdding] = useState(false);
-    const [newCard, setNewCard] = useState({ title: '', content: '' });
+    const [newCard, setNewCard] = useState({ id: null, title: '', content: '' });
 
     useEffect(() => {
         localStorage.setItem('tcc_cards', JSON.stringify(cards));
     }, [cards]);
 
-    const addCard = (e) => {
+    const saveCard = (e) => {
         e.preventDefault();
-        setCards([...cards, { id: Date.now(), ...newCard }]);
+        let newCards;
+        if (newCard.id) {
+            newCards = cards.map(c => c.id === newCard.id ? newCard : c);
+        } else {
+            newCards = [...cards, { ...newCard, id: Date.now() }];
+        }
+        setCards(newCards);
         setIsAdding(false);
-        setNewCard({ title: '', content: '' });
+        setNewCard({ id: null, title: '', content: '' });
+    };
+
+    const editCard = (card) => {
+        setNewCard(card);
+        setIsAdding(true);
     };
 
     const deleteCard = (id) => {
@@ -30,12 +41,12 @@ const CopingCards = () => {
     return (
         <div className="sub-page">
             <header className="page-header">
-                <button className="icon-btn" onClick={() => isAdding ? setIsAdding(false) : navigate(-1)}>
+                <button className="icon-btn" onClick={() => { setIsAdding(false); setNewCard({ id: null, title: '', content: '' }); navigate(-1); }}>
                     <ArrowLeft size={24} />
                 </button>
-                <h1>{isAdding ? 'Novo Cartão' : 'Cartões de Enfrentamento'}</h1>
+                <h1>{isAdding ? (newCard.id ? 'Editar Cartão' : 'Novo Cartão') : 'Cartões de Enfrentamento'}</h1>
                 {!isAdding && (
-                    <button className="icon-btn-primary" onClick={() => setIsAdding(true)}>
+                    <button className="icon-btn-primary" onClick={() => { setNewCard({ id: null, title: '', content: '' }); setIsAdding(true); }}>
                         <Plus size={24} />
                     </button>
                 )}
@@ -43,7 +54,7 @@ const CopingCards = () => {
 
             <div className="content-container">
                 {isAdding ? (
-                    <form onSubmit={addCard} className="generic-form">
+                    <form onSubmit={saveCard} className="generic-form">
                         <div className="form-group">
                             <label>Título / Situação</label>
                             <input
@@ -61,7 +72,7 @@ const CopingCards = () => {
                                 required
                             />
                         </div>
-                        <button type="submit" className="save-btn"><Plus size={20} /> Criar Cartão</button>
+                        <button type="submit" className="save-btn"><Save size={20} /> Salvar Cartão</button>
                     </form>
                 ) : (
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 16 }}>
@@ -70,9 +81,14 @@ const CopingCards = () => {
                                 <div key={card.id} className="contact-card" style={{ flexDirection: 'column', alignItems: 'flex-start', background: '#fff3e0', border: '1px solid #ffe0b2' }}>
                                     <h3 style={{ fontSize: 16, marginBottom: 8, color: '#e65100' }}>{card.title}</h3>
                                     <p style={{ fontSize: 14, whiteSpace: 'pre-wrap', flex: 1 }}>{card.content}</p>
-                                    <button className="delete-mini" onClick={() => deleteCard(card.id)} style={{ alignSelf: 'flex-end', marginTop: 10 }}>
-                                        <Trash2 size={16} />
-                                    </button>
+                                    <div style={{ alignSelf: 'flex-end', marginTop: 10, display: 'flex', gap: 8 }}>
+                                        <button className="icon-btn" onClick={() => editCard(card)} title="Editar" style={{ padding: 4 }}>
+                                            <Edit2 size={16} />
+                                        </button>
+                                        <button className="delete-mini" onClick={() => deleteCard(card.id)} title="Excluir">
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </div>
                             ))
                         }

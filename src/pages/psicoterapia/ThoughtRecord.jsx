@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Save, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Plus, Save, Trash2, ChevronDown, ChevronUp, Edit2 } from 'lucide-react';
 import '../support/SubPage.css';
 
 const ThoughtRecord = () => {
@@ -13,6 +13,7 @@ const ThoughtRecord = () => {
     const [expandedIds, setExpandedIds] = useState([]);
 
     const [form, setForm] = useState({
+        id: null,
         date: new Date().toISOString().slice(0, 16),
         situation: '',
         emotion: '',
@@ -28,12 +29,24 @@ const ThoughtRecord = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setThoughts([{ id: Date.now(), ...form }, ...thoughts]);
+        let newThoughts;
+        if (form.id) {
+            newThoughts = thoughts.map(t => t.id === form.id ? form : t);
+        } else {
+            newThoughts = [{ ...form, id: Date.now() }, ...thoughts];
+        }
+        setThoughts(newThoughts);
         setIsAdding(false);
         setForm({
+            id: null,
             date: new Date().toISOString().slice(0, 16),
             situation: '', emotion: '', automaticThought: '', distortion: '', rationalResponse: '', outcome: ''
         });
+    };
+
+    const editThought = (thought) => {
+        setForm(thought);
+        setIsAdding(true);
     };
 
     const toggleExpand = (id) => {
@@ -55,12 +68,12 @@ const ThoughtRecord = () => {
     return (
         <div className="sub-page">
             <header className="page-header">
-                <button className="icon-btn" onClick={() => isAdding ? setIsAdding(false) : navigate(-1)}>
+                <button className="icon-btn" onClick={() => { setIsAdding(false); setForm({ id: null, date: new Date().toISOString().slice(0, 16), situation: '', emotion: '', automaticThought: '', distortion: '', rationalResponse: '', outcome: '' }); navigate(-1); }}>
                     <ArrowLeft size={24} />
                 </button>
-                <h1>{isAdding ? 'Novo R.P.D.' : 'Registro de Pensamentos'}</h1>
+                <h1>{isAdding ? (form.id ? 'Editar Pensamento' : 'Novo Pensamento') : 'Registro de Pensamentos'}</h1>
                 {!isAdding && (
-                    <button className="icon-btn-primary" onClick={() => setIsAdding(true)}>
+                    <button className="icon-btn-primary" onClick={() => { setForm({ id: null, date: new Date().toISOString().slice(0, 16), situation: '', emotion: '', automaticThought: '', distortion: '', rationalResponse: '', outcome: '' }); setIsAdding(true); }}>
                         <Plus size={24} />
                     </button>
                 )}
@@ -144,9 +157,14 @@ const ThoughtRecord = () => {
                                             <hr style={{ margin: '10px 0', borderColor: '#eee' }} />
                                             <p><strong>Resposta:</strong> {t.rationalResponse}</p>
                                             <p><strong>Resultado:</strong> {t.outcome}</p>
-                                            <button className="delete-mini" onClick={() => deleteThought(t.id)} style={{ marginTop: 10, alignSelf: 'flex-end' }}>
-                                                <Trash2 size={16} /> Excluir
-                                            </button>
+                                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 10 }}>
+                                                <button className="icon-btn" onClick={() => editThought(t)} title="Editar">
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button className="delete-mini" onClick={() => deleteThought(t.id)} title="Excluir">
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
                                 </div>

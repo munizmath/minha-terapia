@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useMedications } from '../context/MedicationContext';
 import { commonMedications } from '../data/medicationsDb';
@@ -7,7 +7,9 @@ import './AddMedication.css';
 
 const AddMedication = () => {
     const navigate = useNavigate();
-    const { addMedication } = useMedications();
+    const location = useLocation();
+    const { addMedication, updateMedication } = useMedications();
+    const editingMed = location.state?.med;
 
     const [formData, setFormData] = useState({
         name: '',
@@ -18,6 +20,19 @@ const AddMedication = () => {
         stock: '',
     });
 
+    useEffect(() => {
+        if (editingMed) {
+            setFormData({
+                name: editingMed.name || '',
+                dosage: editingMed.dosage || '',
+                time: editingMed.time || '08:00',
+                frequency: editingMed.frequency || 'daily',
+                intervalHours: editingMed.intervalHours || '',
+                stock: editingMed.stock || '',
+            });
+        }
+    }, [editingMed]);
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -26,7 +41,11 @@ const AddMedication = () => {
         e.preventDefault();
         if (!formData.name) return;
 
-        addMedication(formData);
+        if (editingMed) {
+            updateMedication(editingMed.id, formData);
+        } else {
+            addMedication(formData);
+        }
         navigate('/');
     };
 
@@ -36,7 +55,7 @@ const AddMedication = () => {
                 <button className="icon-btn" onClick={() => navigate(-1)}>
                     <ArrowLeft size={24} />
                 </button>
-                <h1>Novo Medicamento</h1>
+                <h1>{editingMed ? 'Editar Medicamento' : 'Novo Medicamento'}</h1>
                 <div style={{ width: 32 }}></div>
             </header>
 

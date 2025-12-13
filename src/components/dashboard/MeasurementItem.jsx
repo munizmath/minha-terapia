@@ -1,5 +1,6 @@
 import React from 'react';
-import { Activity, Scale, Heart, Thermometer, Droplet, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Activity, Scale, Heart, Thermometer, Droplet, Trash2, Edit2 } from 'lucide-react';
 import { useMedications } from '../../context/MedicationContext';
 import './TimelineItem.css';
 
@@ -13,6 +14,7 @@ const ICONS = {
 
 const MeasurementItem = ({ data }) => {
     const { removeMeasurement } = useMedications();
+    const navigate = useNavigate();
     const Icon = ICONS[data.subtype] || Activity;
 
     const time = new Date(data.date).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -33,8 +35,19 @@ const MeasurementItem = ({ data }) => {
                 </div>
 
                 <button
+                    className="edit-btn"
+                    style={{ background: 'none', border: 'none', color: '#666', marginRight: 8, cursor: 'pointer' }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        // Navigate to AddMeasurement with state
+                        navigate('/measurements/add', { state: { measurement: data } });
+                    }}
+                >
+                    <Edit2 size={18} />
+                </button>
+                <button
                     className="check-btn"
-                    style={{ background: 'none', border: 'none', color: '#999' }}
+                    style={{ background: 'none', border: 'none', color: '#999', cursor: 'pointer' }}
                     onClick={(e) => {
                         e.stopPropagation();
                         if (window.confirm('Excluir esta medida?')) removeMeasurement(data.id);

@@ -64,6 +64,10 @@
     background-color: #9E9E9E;
 }
 
+.icon-box.purple {
+    background-color: #9C27B0;
+}
+
 .menu-text {
     flex: 1;
 }

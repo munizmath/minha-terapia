@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Minus, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, Minus, Trash2, Edit2 } from 'lucide-react';
 import '../support/SubPage.css'; // Reuse styles
 
 const HabitFrequency = () => {
@@ -40,6 +40,13 @@ const HabitFrequency = () => {
         }
     };
 
+    const editHabitName = (habit) => {
+        const newName = prompt('Editar nome do hábito:', habit.name);
+        if (newName && newName.trim()) {
+            setHabits(habits.map(h => h.id === habit.id ? { ...h, name: newName.trim() } : h));
+        }
+    };
+
     return (
         <div className="sub-page">
             <header className="page-header">
@@ -67,8 +74,11 @@ const HabitFrequency = () => {
                     ) : (
                         habits.map(habit => (
                             <div key={habit.id} className="contact-card" style={{ alignItems: 'center' }}>
-                                <div style={{ flex: 1 }}>
-                                    <h3>{habit.name}</h3>
+                                <div style={{ flex: 1, cursor: 'pointer' }} onClick={() => editHabitName(habit)}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                        <h3>{habit.name}</h3>
+                                        <Edit2 size={14} color="#999" />
+                                    </div>
                                     <p style={{ fontSize: 13, color: '#666' }}>Hoje: {habit.count} vezes</p>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

@@ -93,6 +93,10 @@ export const MedicationProvider = ({ children }) => {
         setMeasurements(prev => [...prev, { id: uuidv4(), createdAt: new Date(), ...data }]);
     };
 
+    const updateMeasurement = (id, updatedData) => {
+        setMeasurements(prev => prev.map(m => m.id === id ? { ...m, ...updatedData } : m));
+    };
+
     const removeMeasurement = (id) => setMeasurements(prev => prev.filter(m => m.id !== id));
 
     const addSymptom = (data) => {
@@ -169,6 +173,23 @@ export const MedicationProvider = ({ children }) => {
         // 9. Care Recipients (LS)
         const care = JSON.parse(localStorage.getItem('care_recipients') || '[]');
         XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(care), "Cuidadores");
+
+        // --- TCC EXPORTS ---
+        // 10. Habits
+        const habits = JSON.parse(localStorage.getItem('tcc_habits') || '[]');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(habits), "TCC_Habitos");
+
+        // 11. Thoughts
+        const thoughts = JSON.parse(localStorage.getItem('tcc_thoughts') || '[]');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(thoughts), "TCC_Pensamentos");
+
+        // 12. ABC
+        const abc = JSON.parse(localStorage.getItem('tcc_abc') || '[]');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(abc), "TCC_ABC");
+
+        // 13. Cards
+        const cards = JSON.parse(localStorage.getItem('tcc_cards') || '[]');
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(cards), "TCC_Cartoes");
 
         XLSX.writeFile(wb, "MinhaTerapia_TUDO.xlsx");
     };
@@ -255,6 +276,12 @@ export const MedicationProvider = ({ children }) => {
                     localStorage.setItem('emergency_contacts', JSON.stringify(getSheet("Emergencia")));
                     localStorage.setItem('care_recipients', JSON.stringify(getSheet("Cuidadores")));
 
+                    // TCC Imports
+                    localStorage.setItem('tcc_habits', JSON.stringify(getSheet("TCC_Habitos")));
+                    localStorage.setItem('tcc_thoughts', JSON.stringify(getSheet("TCC_Pensamentos")));
+                    localStorage.setItem('tcc_abc', JSON.stringify(getSheet("TCC_ABC")));
+                    localStorage.setItem('tcc_cards', JSON.stringify(getSheet("TCC_Cartoes")));
+
                     // Reload to reflect all changes
                     setTimeout(() => window.location.reload(), 500);
                     resolve(true);
@@ -278,7 +305,7 @@ export const MedicationProvider = ({ children }) => {
         <MedicationContext.Provider value={{
             medications, logs, measurements, symptoms, activities,
             addMedication, updateMedication, removeMedication, logIntake,
-            addMeasurement, removeMeasurement, addSymptom, removeSymptom,
+            addMeasurement, updateMeasurement, removeMeasurement, addSymptom, removeSymptom,
             addActivity, removeActivity,
             exportData, importData, clearAllData
         }}>

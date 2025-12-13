@@ -1,32 +1,43 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Phone, MapPin, User, Stethoscope, Trash2, Save, Share2, Download } from 'lucide-react';
+import { ArrowLeft, Plus, Phone, MapPin, User, Stethoscope, Trash2, Save, Share2, Download, Mail, Edit2 } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import './SubPage.css';
 
 const Doctors = () => {
     const navigate = useNavigate();
-    // Local state for demo. In real app, put in Context or separate DoctorsContext
     const [doctors, setDoctors] = useState(() => {
         const saved = localStorage.getItem('doctors');
         return saved ? JSON.parse(saved) : [];
     });
 
     const [isAdding, setIsAdding] = useState(false);
-    const [formData, setFormData] = useState({ name: '', specialty: '', phone: '', address: '' });
+    const [formData, setFormData] = useState({ id: null, name: '', specialty: '', phone: '', address: '', email: '' });
 
     const saveDoctor = (e) => {
         e.preventDefault();
-        const newDoc = { ...formData, id: uuidv4() };
-        const newDocs = [...doctors, newDoc];
+        let newDocs;
+        if (formData.id) {
+            // Update existing
+            newDocs = doctors.map(d => d.id === formData.id ? formData : d);
+        } else {
+            // Create new
+            const newDoc = { ...formData, id: uuidv4() };
+            newDocs = [...doctors, newDoc];
+        }
         setDoctors(newDocs);
         localStorage.setItem('doctors', JSON.stringify(newDocs));
         setIsAdding(false);
-        setFormData({ name: '', specialty: '', phone: '', address: '' });
+        setFormData({ id: null, name: '', specialty: '', phone: '', address: '', email: '' });
+    };
+
+    const editDoctor = (doc) => {
+        setFormData(doc);
+        setIsAdding(true);
     };
 
     const deleteDoctor = (id) => {
-        if (window.confirm('Remover este médico?')) {
+        if (window.confirm('Remover este especialista?')) {
             const newDocs = doctors.filter(d => d.id !== id);
             setDoctors(newDocs);
             localStorage.setItem('doctors', JSON.stringify(newDocs));
@@ -37,18 +48,17 @@ const Doctors = () => {
         if (doctors.length === 0) return;
 
         const text = doctors.map(d =>
-            `*${d.name}* (${d.specialty})\n📞 ${d.phone}\n📍 ${d.address}`
+            `*${d.name}* (${d.specialty})\n📞 ${d.phone}\n📧 ${d.email || ''}\n📍 ${d.address}`
         ).join('\n\n');
 
         const shareData = {
-            title: 'Meus Médicos - Minha Terapia',
+            title: 'Meus Especialistas - Minha Terapia',
             text: text,
         };
 
         if (navigator.share) {
             navigator.share(shareData).catch(console.error);
         } else {
-            // Fallback: Copy to clipboard or simple alert
             navigator.clipboard.writeText(text).then(() => {
                 alert('Lista copiada para a área de transferência!');
             });
@@ -58,23 +68,23 @@ const Doctors = () => {
     const handleImport = async () => {
         if ('contacts' in navigator && 'ContactsManager' in window) {
             try {
-                const props = ['name', 'tel', 'address'];
+                const props = ['name', 'tel', 'address', 'email'];
                 const contacts = await navigator.contacts.select(props, { multiple: true });
 
                 const importedDocs = contacts.map(c => ({
                     id: uuidv4(),
                     name: c.name[0] || 'Sem nome',
-                    specialty: 'Importado',
+                    specialty: 'Importado (Edite para alterar)',
                     phone: c.tel ? c.tel[0] : '',
-                    address: c.address ? c.address[0].addressLine[0] : '' // Address format varies
+                    address: c.address ? c.address[0].addressLine[0] : '',
+                    email: c.email ? c.email[0] : ''
                 }));
 
                 const newDocs = [...doctors, ...importedDocs];
                 setDoctors(newDocs);
                 localStorage.setItem('doctors', JSON.stringify(newDocs));
-                alert(`${importedDocs.length} contatos importados!`);
+                alert(`${importedDocs.length} contatos importados! Edite-os para definir a especialidade.`);
             } catch (ex) {
-                // User cancelled or error
                 console.error(ex);
             }
         } else {
@@ -83,54 +93,34 @@ const Doctors = () => {
     };
 
     const specialties = [
-        // A
         "Acupuntura", "Alergia e Imunologia", "Análises Clínicas", "Anatomia Patológica", "Anestesiologia", "Angiologia", "Arteterapia",
-        // B
         "Biomedicina", "Bioquímica",
-        // C
         "Cardiologia", "Cardiologia Pediátrica", "Cirurgia Bariátrica", "Cirurgia Buco-Maxilo-Facial", "Cirurgia Cardiovascular", "Cirurgia da Mão", "Cirurgia de Cabeça e Pescoço", "Cirurgia do Aparelho Digestivo", "Cirurgia Geral", "Cirurgia Oncológica", "Cirurgia Pediátrica", "Cirurgia Plástica", "Cirurgia Torácica", "Cirurgia Vascular", "Clínica Geral / Médica", "Coloproctologia", "Cuidador de Idosos",
-        // D
         "Dentística (Restauradora)", "Dermatologia", "Disfunção Temporomandibular (DTM)", "Dor Orofacial", "Doula", "Drenagem Linfática",
-        // E
         "Ecografia", "Educação Física", "Endocrinologia e Metabologia", "Endodontia (Canal)", "Endoscopia", "Enfermagem", "Estética", "Estomatologia",
-        // F
         "Farmácia", "Fisiatria", "Fisioterapia", "Fisioterapia Dermato-Funcional", "Fisioterapia Esportiva", "Fisioterapia Neurológica", "Fisioterapia Pélvica", "Fisioterapia Respiratória", "Fonoaudiologia",
-        // G
         "Gastroenterologia", "Genética Médica", "Geriatria", "Gerontologia", "Ginecologia e Obstetrícia",
-        // H
         "Harmonização Orofacial", "Hematologia e Hemoterapia", "Hepatologia", "Homeopatia",
-        // I
         "Implantodontia", "Infectologia", "Instrumentação Cirúrgica",
-        // M
         "Mamografia", "Massoterapia", "Mastologia", "Medicina de Emergência", "Medicina de Família e Comunidade", "Medicina do Sono", "Medicina do Trabalho", "Medicina do Tráfego", "Medicina Esportiva", "Medicina Física e Reabilitação", "Medicina Hiperbárica", "Medicina Intensiva (UTI)", "Medicina Legal e Perícia", "Medicina Nuclear", "Medicina Paliativa", "Medicina Preventiva e Social", "Musicoterapia",
-        // N
         "Naturopatia", "Nefrologia", "Neurocirurgia", "Neurologia", "Neuropediatria", "Neuropsicologia", "Nutrição", "Nutrição Clínica", "Nutrição Esportiva", "Nutrologia",
-        // O
         "Obstetrícia", "Odontogeriatria", "Odontologia", "Odontologia do Esporte", "Odontologia do Trabalho", "Odontologia Estética", "Odontologia Hospitalar", "Odontologia Legal", "Odontologia para Pacientes Especiais", "Odontopediatria", "Oftalmologia", "Oncologia Clínica", "Optometria", "Ortodontia", "Ortopedia e Traumatologia", "Ortopedia Funcional dos Maxilares", "Ortóptica", "Osteopatia", "Otorrinolaringologia",
-        // P
         "Patologia", "Patologia Clínica", "Patologia Oral e Maxilo Facial", "Pediatria", "Periodontia (Gengiva)", "Personal Trainer", "Pilates", "Pneumologia", "Podologia", "Prótese Buco-Maxilo-Facial", "Prótese Dentária", "Psicanálise", "Psicologia", "Psicologia Hospitalar", "Psicopedagogia", "Psiquiatria", "Psiquiatria da Infância e Adolescência",
-        // Q
         "Quiropraxia",
-        // R
         "Radiologia e Diagnóstico por Imagem", "Radiologia Intervencionista", "Radiologia Odontológica", "Radioterapia", "Reflexologia", "Reprodução Humana", "Reumatologia",
-        // S
         "Saúde Coletiva", "Saúde da Família", "Sexologia",
-        // T
         "Técnico de Enfermagem", "Terapia Holística", "Terapia Ocupacional", "Toxicologia",
-        // U
         "Ultrassonografia", "Urologia",
-        // Y
         "Yoga"
     ].sort();
 
     return (
         <div className="sub-page">
             <header className="page-header">
-                <button className="icon-btn" onClick={() => isAdding ? setIsAdding(false) : navigate(-1)}>
+                <button className="icon-btn" onClick={() => { setIsAdding(false); setFormData({ id: null, name: '', specialty: '', phone: '', address: '', email: '' }); navigate(-1); }}>
                     <ArrowLeft size={24} />
                 </button>
-                {/* Changed Title */}
-                <h1>{isAdding ? 'Novo Especialista' : 'Meus Especialistas'}</h1>
+                <h1>{isAdding ? (formData.id ? 'Editar Especialista' : 'Novo Especialista') : 'Meus Especialistas'}</h1>
                 {!isAdding && (
                     <div style={{ display: 'flex', gap: 8 }}>
                         <button className="icon-btn" onClick={handleImport} title="Importar Contatos">
@@ -139,7 +129,7 @@ const Doctors = () => {
                         <button className="icon-btn" onClick={handleExport} title="Exportar">
                             <Share2 size={24} color="var(--color-primary)" />
                         </button>
-                        <button className="icon-btn-primary" onClick={() => setIsAdding(true)}>
+                        <button className="icon-btn-primary" onClick={() => { setFormData({ id: null, name: '', specialty: '', phone: '', address: '', email: '' }); setIsAdding(true); }}>
                             <Plus size={24} />
                         </button>
                     </div>
@@ -155,7 +145,7 @@ const Doctors = () => {
                                 required
                                 value={formData.name}
                                 onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                placeholder="Dr. Silva"
+                                placeholder="Nome do Especialista"
                                 autoFocus
                             />
                         </div>
@@ -164,7 +154,7 @@ const Doctors = () => {
                             <input
                                 value={formData.specialty}
                                 onChange={e => setFormData({ ...formData, specialty: e.target.value })}
-                                placeholder="Cardiologista"
+                                placeholder="Ex: Cardiologista"
                                 list="specialty-list"
                             />
                             <datalist id="specialty-list">
@@ -181,6 +171,15 @@ const Doctors = () => {
                             />
                         </div>
                         <div className="form-group">
+                            <label><Mail size={16} /> E-mail</label>
+                            <input
+                                type="email"
+                                value={formData.email}
+                                onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                placeholder="email@exemplo.com"
+                            />
+                        </div>
+                        <div className="form-group">
                             <label><MapPin size={16} /> Endereço</label>
                             <input
                                 value={formData.address}
@@ -188,32 +187,49 @@ const Doctors = () => {
                                 placeholder="Av. Paulista, 1000"
                             />
                         </div>
-                        <button type="submit" className="save-btn">
-                            <Save size={20} /> Salvar
-                        </button>
+                        <div style={{ display: 'flex', gap: 10 }}>
+                            <button type="button" className="icon-btn" style={{ flex: 1, justifyContent: 'center' }} onClick={() => setIsAdding(false)}>
+                                Cancelar
+                            </button>
+                            <button type="submit" className="save-btn" style={{ flex: 2 }}>
+                                <Save size={20} /> Salvar
+                            </button>
+                        </div>
                     </form>
                 ) : (
                     <div className="list-grid">
                         {doctors.length === 0 ? (
-                            <p className="empty-text">Nenhum médico cadastrado.</p>
+                            <p className="empty-text">Nenhum especialista cadastrado.</p>
                         ) : (
                             doctors.map(doc => (
                                 <div key={doc.id} className="contact-card">
                                     <div className="contact-icon">
                                         <Stethoscope size={24} color="white" />
                                     </div>
-                                    <div className="contact-info">
+                                    <div className="contact-info" onClick={() => editDoctor(doc)} style={{ cursor: 'pointer' }}>
                                         <h3>{doc.name}</h3>
                                         <p className="specialty">{doc.specialty}</p>
-                                        {doc.phone && (
-                                            <a href={`tel:${doc.phone}`} className="contact-link">
-                                                <Phone size={14} /> {doc.phone}
-                                            </a>
-                                        )}
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 4 }}>
+                                            {doc.phone && (
+                                                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#666' }}>
+                                                    <Phone size={12} /> {doc.phone}
+                                                </span>
+                                            )}
+                                            {doc.email && (
+                                                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#666' }}>
+                                                    <Mail size={12} /> {doc.email}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                    <button className="delete-mini" onClick={() => deleteDoctor(doc.id)}>
-                                        <Trash2 size={18} />
-                                    </button>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                        <button className="icon-btn" onClick={() => editDoctor(doc)} style={{ padding: 6 }}>
+                                            <Edit2 size={16} />
+                                        </button>
+                                        <button className="delete-mini" onClick={() => deleteDoctor(doc.id)}>
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </div>
                             ))
                         )}
