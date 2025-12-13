@@ -68,7 +68,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 20px;
-    background-color: white;
+    background-color: var(--color-surface);
     color: var(--color-text-primary);
     border: none;
     border-radius: var(--radius-md);

@@ -150,6 +150,7 @@ const BODY_SECTIONS = [
 ];
 
 const AddMeasurement = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const { addMeasurement, updateMeasurement } = useMedications();
     const editingMeas = location.state?.measurement;

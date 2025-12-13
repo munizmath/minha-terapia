@@ -1,17 +1,15 @@
 .top-bar {
     position: sticky;
     top: 0;
-    background-color: var(--color-background);
-    /* Or Primary if we want colored header */
     padding: 16px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 50;
-    /* Glassmorphism optional */
+    /* Glassmorphism with theme support */
     backdrop-filter: blur(10px);
-    background-color: rgba(245, 245, 245, 0.9);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-surface-dim);
 }
 
 .date-display h1 {

@@ -61,7 +61,7 @@
 }
 
 .icon-box.gray {
-    background-color: #9E9E9E;
+    background-color: var(--color-primary);
 }
 
 .icon-box.purple {

@@ -77,3 +77,37 @@ button:active {
   transform: scale(0.96);
   transition: transform 0.1s;
 }
+
+/* Global icon button styles for dark mode */
+.icon-btn,
+.icon-btn-primary {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.icon-btn-primary {
+  color: var(--color-primary);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.page-header h1 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--color-text-primary);
+  flex: 1;
+  text-align: center;
+}

@@ -7,7 +7,7 @@ const MeasurementChart = ({ data, unit, title, color = '#2196F3', isBP = false }
 
     if (!data || data.length < 2) {
         return (
-            <div style={{ padding: 20, textAlign: 'center', backgroundColor: '#f5f5f5', borderRadius: 8, color: '#666' }}>
+            <div style={{ padding: 20, textAlign: 'center', backgroundColor: 'var(--color-surface)', borderRadius: 8, color: 'var(--color-text-secondary)' }}>
                 <p>Insira pelo menos 2 registros para ver o gráfico de {title}.</p>
             </div>
         );
@@ -58,8 +58,8 @@ const MeasurementChart = ({ data, unit, title, color = '#2196F3', isBP = false }
     };
 
     return (
-        <div style={{ backgroundColor: 'white', padding: 16, borderRadius: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', maxWidth: '100%', overflow: 'hidden' }}>
-            <h3 style={{ fontSize: 16, marginBottom: 16, color: '#333' }}>Evolução: {title}</h3>
+        <div style={{ backgroundColor: 'var(--color-surface)', padding: 16, borderRadius: 12, boxShadow: 'var(--shadow-sm)', maxWidth: '100%', overflow: 'hidden' }}>
+            <h3 style={{ fontSize: 16, marginBottom: 16, color: 'var(--color-text-primary)' }}>Evolução: {title}</h3>
 
             <div style={{ maxWidth: 500, margin: '0 auto', position: 'relative' }}>
                 <svg viewBox={`0 0 ${width} ${height}`} style={{ width: '100%', height: 'auto' }}>
@@ -69,8 +69,8 @@ const MeasurementChart = ({ data, unit, title, color = '#2196F3', isBP = false }
                         const val = minVal + t * (maxVal - minVal);
                         return (
                             <g key={t}>
-                                <line x1={padding} y1={y} x2={width - padding} y2={y} stroke="#eee" strokeWidth="1" />
-                                <text x={padding - 5} y={y + 4} fontSize="12" fill="#999" textAnchor="end">
+                                <line x1={padding} y1={y} x2={width - padding} y2={y} stroke="var(--color-surface-dim)" strokeWidth="1" />
+                                <text x={padding - 5} y={y + 4} fontSize="12" fill="var(--color-text-secondary)" textAnchor="end">
                                     {Math.round(val)}
                                 </text>
                             </g>
@@ -168,7 +168,7 @@ const MeasurementChart = ({ data, unit, title, color = '#2196F3', isBP = false }
             </div>
 
             {/* Labels / Legend */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#888', marginTop: 8, paddingLeft: 10, paddingRight: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 8, paddingLeft: 10, paddingRight: 10 }}>
                 <span>{format(parseISO(sortedData[0].date), 'dd/MM')}</span>
                 {isBP && (
                     <div style={{ display: 'flex', gap: 12 }}>

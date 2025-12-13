@@ -129,13 +129,23 @@
 }
 
 .action-btn.danger {
-    border-color: #fee2e2;
-    background-color: #fff1f2;
+    border-color: rgba(244, 67, 54, 0.3);
+    background-color: rgba(244, 67, 54, 0.1);
 }
 
 .action-btn.danger .icon-box {
-    background-color: #fee2e2;
-    color: #ef4444;
+    background-color: rgba(244, 67, 54, 0.2);
+    color: var(--color-error);
+}
+
+[data-theme='dark'] .action-btn.danger {
+    border-color: rgba(244, 67, 54, 0.4);
+    background-color: rgba(244, 67, 54, 0.15);
+}
+
+[data-theme='dark'] .action-btn.danger .icon-box {
+    background-color: rgba(244, 67, 54, 0.3);
+    color: #ff5252;
 }
 
 .action-btn h3 {
@@ -153,13 +163,16 @@
 .info-alert {
     margin-top: 32px;
     padding: 16px;
-    background-color: #fffbeb;
-    /* Amber-50 */
+    background-color: rgba(245, 158, 11, 0.1);
     border-left: 4px solid #f59e0b;
-    /* Amber */
     color: #92400e;
     font-size: 0.9rem;
     border-radius: 4px;
+}
+
+[data-theme='dark'] .info-alert {
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
 }
 
 /* Tracker Styles */
@@ -363,7 +376,7 @@
 /* Settings Styles */
 .section-group {
     margin-bottom: 24px;
-    background: white;
+    background: var(--color-surface);
     border-radius: var(--radius-md);
     overflow: hidden;
     box-shadow: var(--shadow-sm);

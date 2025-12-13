@@ -87,8 +87,10 @@ const SymptomTracker = () => {
 
     return (
         <div className="sub-page">
-            <header className="sub-header">
-                <button onClick={() => navigate(-1)} className="back-btn"><ArrowLeft size={24} /></button>
+            <header className="page-header">
+                <button className="icon-btn" onClick={() => navigate(-1)}>
+                    <ArrowLeft size={24} />
+                </button>
                 <h1>Registrar Sintoma</h1>
             </header>
 

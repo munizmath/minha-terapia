@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Phone, Settings, ChevronRight, Heart, Database } from 'lucide-react';
+import { Users, Phone, Settings, ChevronRight, Heart, Database, AlertTriangle } from 'lucide-react';
 import './Support.css';
 
 const Support = () => {
@@ -28,7 +28,7 @@ const Support = () => {
                 <div className="menu-card">
                     <div
                         className="menu-item"
-                        onClick={() => navigate('/support/doctors')}
+                        onClick={() => navigate('/support/specialists')}
                     >
                         <div className="icon-box blue"><Users size={20} /></div>
                         <div className="menu-text">
@@ -43,6 +43,15 @@ const Support = () => {
                         <div className="menu-text">
                             <h3>Cuidadores / Dependentes</h3>
                             <p>Compartilhe seu progresso</p>
+                        </div>
+                        <ChevronRight size={20} className="chevron" />
+                    </div>
+                    <div className="divider"></div>
+                    <div className="menu-item" onClick={() => navigate('/support/allergies')}>
+                        <div className="icon-box orange"><AlertTriangle size={20} /></div>
+                        <div className="menu-text">
+                            <h3>Alergias</h3>
+                            <p>Registre suas alergias conhecidas</p>
                         </div>
                         <ChevronRight size={20} className="chevron" />
                     </div>

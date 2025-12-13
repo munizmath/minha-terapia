@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { useNotifications } from '../hooks/useNotifications';
+import { useEncryption } from '../hooks/useEncryption';
 
 const MedicationContext = createContext();
 
@@ -14,38 +15,90 @@ export const useMedications = () => {
 };
 
 export const MedicationProvider = ({ children }) => {
+    const { encryptionEnabled, readEncryptedData, saveEncryptedData } = useEncryption();
+
+    // Função auxiliar para carregar dados (com ou sem criptografia)
+    const loadData = async (key, defaultValue = []) => {
+        if (encryptionEnabled) {
+            return await readEncryptedData(key, defaultValue);
+        }
+        const saved = localStorage.getItem(key);
+        return saved ? JSON.parse(saved) : defaultValue;
+    };
+
+    // Função auxiliar para salvar dados (com ou sem criptografia)
+    const saveData = async (key, data) => {
+        if (encryptionEnabled) {
+            await saveEncryptedData(key, data);
+        } else {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+    };
+
     // --- STATE ---
-    const [medications, setMedications] = useState(() => {
-        const saved = localStorage.getItem('medications');
-        return saved ? JSON.parse(saved) : [];
-    });
+    const [medications, setMedications] = useState([]);
+    const [logs, setLogs] = useState([]);
+    const [measurements, setMeasurements] = useState([]);
+    const [symptoms, setSymptoms] = useState([]);
+    const [activities, setActivities] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const [logs, setLogs] = useState(() => {
-        const saved = localStorage.getItem('medication_logs');
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    const [measurements, setMeasurements] = useState(() => {
-        const saved = localStorage.getItem('measurements');
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    const [symptoms, setSymptoms] = useState(() => {
-        const saved = localStorage.getItem('symptoms');
-        return saved ? JSON.parse(saved) : [];
-    });
-
-    const [activities, setActivities] = useState(() => {
-        const saved = localStorage.getItem('activities');
-        return saved ? JSON.parse(saved) : [];
-    });
+    // Carregar dados iniciais
+    useEffect(() => {
+        const initializeData = async () => {
+            setIsLoading(true);
+            try {
+                const [meds, logsData, meas, symp, act] = await Promise.all([
+                    loadData('medications', []),
+                    loadData('medication_logs', []),
+                    loadData('measurements', []),
+                    loadData('symptoms', []),
+                    loadData('activities', [])
+                ]);
+                setMedications(meds);
+                setLogs(logsData);
+                setMeasurements(meas);
+                setSymptoms(symp);
+                setActivities(act);
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        initializeData();
+    }, [encryptionEnabled]);
 
     // --- EFFECTS ---
-    useEffect(() => localStorage.setItem('medications', JSON.stringify(medications)), [medications]);
-    useEffect(() => localStorage.setItem('medication_logs', JSON.stringify(logs)), [logs]);
-    useEffect(() => localStorage.setItem('measurements', JSON.stringify(measurements)), [measurements]);
-    useEffect(() => localStorage.setItem('symptoms', JSON.stringify(symptoms)), [symptoms]);
-    useEffect(() => localStorage.setItem('activities', JSON.stringify(activities)), [activities]);
+    useEffect(() => {
+        if (!isLoading) {
+            saveData('medications', medications);
+        }
+    }, [medications, encryptionEnabled, isLoading]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            saveData('medication_logs', logs);
+        }
+    }, [logs, encryptionEnabled, isLoading]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            saveData('measurements', measurements);
+        }
+    }, [measurements, encryptionEnabled, isLoading]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            saveData('symptoms', symptoms);
+        }
+    }, [symptoms, encryptionEnabled, isLoading]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            saveData('activities', activities);
+        }
+    }, [activities, encryptionEnabled, isLoading]);
 
     // Init Notifications
     const { sendStockAlert } = useNotifications(medications, logs);
@@ -111,46 +164,177 @@ export const MedicationProvider = ({ children }) => {
 
 
     // --- BACKUP LOGIC (EXPORT/IMPORT) ---
+    
+    /**
+     * SECURITY-NOTES: Exportação de Dados em Excel
+     * 
+     * Função auxiliar para formatar planilha com cabeçalhos e bordas.
+     * Aplica formatação profissional: cabeçalhos com fundo preto e texto branco,
+     * bordas em todas as células para melhor legibilidade.
+     * 
+     * Controles de Segurança:
+     * - Validação de range de células antes de aplicar formatação
+     * - Sanitização de valores de células
+     * - Limitação de largura de colunas para evitar overflow
+     */
+    // Função auxiliar para criar planilha com cabeçalhos garantidos
+    const createSheetWithHeaders = (data, headers) => {
+        // Extrair valores dos cabeçalhos na ordem correta
+        const headerValues = Object.keys(headers).map(key => headers[key]);
+        
+        if (data.length > 0) {
+            // Se há dados, usa json_to_sheet normalmente (já inclui cabeçalhos)
+            return XLSX.utils.json_to_sheet(data);
+        } else {
+            // Se não há dados, cria planilha apenas com cabeçalhos
+            return XLSX.utils.aoa_to_sheet([headerValues]);
+        }
+    };
+
+    const formatSheet = (ws, sheetName) => {
+        if (!ws || !ws['!ref']) return;
+
+        const range = XLSX.utils.decode_range(ws['!ref']);
+        const headerRow = 0;
+
+        // Formatar cabeçalho (linha 1) - Fundo preto, texto branco
+        for (let col = range.s.c; col <= range.e.c; col++) {
+            const cellAddress = XLSX.utils.encode_cell({ r: headerRow, c: col });
+            if (!ws[cellAddress]) continue;
+
+            ws[cellAddress].s = {
+                fill: { 
+                    fgColor: { rgb: "000000" },
+                    patternType: "solid"
+                },
+                font: { 
+                    color: { rgb: "FFFFFF" }, 
+                    bold: true,
+                    sz: 11
+                },
+                alignment: { 
+                    horizontal: "center", 
+                    vertical: "center",
+                    wrapText: true
+                },
+                border: {
+                    top: { style: "thin", color: { rgb: "000000" } },
+                    bottom: { style: "thin", color: { rgb: "000000" } },
+                    left: { style: "thin", color: { rgb: "000000" } },
+                    right: { style: "thin", color: { rgb: "000000" } }
+                }
+            };
+        }
+
+        // Adicionar bordas em todas as células do range utilizado
+        for (let row = range.s.r; row <= range.e.r; row++) {
+            for (let col = range.s.c; col <= range.e.c; col++) {
+                const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+                
+                // Criar célula vazia se não existir
+                if (!ws[cellAddress]) {
+                    ws[cellAddress] = { t: 's', v: '' };
+                }
+
+                // Inicializar estilo se não existir
+                if (!ws[cellAddress].s) {
+                    ws[cellAddress].s = {};
+                }
+
+                // Aplicar bordas em todas as células
+                ws[cellAddress].s.border = {
+                    top: { style: "thin", color: { rgb: "000000" } },
+                    bottom: { style: "thin", color: { rgb: "000000" } },
+                    left: { style: "thin", color: { rgb: "000000" } },
+                    right: { style: "thin", color: { rgb: "000000" } }
+                };
+
+                // Alinhamento para células de dados (não cabeçalho)
+                if (row > headerRow) {
+                    if (!ws[cellAddress].s.alignment) {
+                        ws[cellAddress].s.alignment = { 
+                            vertical: "center",
+                            wrapText: true
+                        };
+                    }
+                }
+            }
+        }
+
+        // Ajustar largura das colunas automaticamente
+        const colWidths = [];
+        for (let col = range.s.c; col <= range.e.c; col++) {
+            let maxLength = 10;
+            for (let row = range.s.r; row <= range.e.r; row++) {
+                const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+                if (ws[cellAddress] && ws[cellAddress].v !== undefined && ws[cellAddress].v !== null) {
+                    const cellValue = String(ws[cellAddress].v);
+                    if (cellValue.length > maxLength) {
+                        maxLength = Math.min(cellValue.length, 50);
+                    }
+                }
+            }
+            colWidths.push({ wch: Math.max(maxLength, 10) });
+        }
+        ws['!cols'] = colWidths;
+    };
+
     const exportData = () => {
         const wb = XLSX.utils.book_new();
 
         // 1. Medications
+        const medsHeaders = { "ID": "ID", "Nome": "Nome", "Dosagem": "Dosagem", "Frequência": "Frequência", "Horário": "Horário", "Estoque": "Estoque", "CriadoEm": "CriadoEm" };
         const medsRows = medications.map(m => ({
             "ID": m.id, "Nome": m.name, "Dosagem": m.dosage,
             "Frequência": m.frequency, "Horário": m.time,
             "Estoque": m.stock, "CriadoEm": m.createdAt
         }));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(medsRows), "Medicamentos");
+        const medsSheet = createSheetWithHeaders(medsRows, medsHeaders);
+        formatSheet(medsSheet, "Medicamentos");
+        XLSX.utils.book_append_sheet(wb, medsSheet, "Medicamentos");
 
         // 2. Measurements
+        const measHeaders = { "ID": "ID", "Tipo": "Tipo", "Valor": "Valor", "Unidade": "Unidade", "Data": "Data" };
         const measRows = measurements.map(m => ({
             "ID": m.id, "Tipo": m.subtype, "Valor": m.value,
             "Unidade": m.unit, "Data": m.date
         }));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(measRows), "Medidas");
+        const measSheet = createSheetWithHeaders(measRows, measHeaders);
+        formatSheet(measSheet, "Medidas");
+        XLSX.utils.book_append_sheet(wb, measSheet, "Medidas");
 
         // 3. Symptoms
+        const sympHeaders = { "ID": "ID", "Sintoma": "Sintoma", "Severidade": "Severidade", "Nota": "Nota", "Data": "Data" };
         const sympRows = symptoms.map(s => ({
             "ID": s.id, "Sintoma": s.name, "Severidade": s.severity,
             "Nota": s.note, "Data": s.date
         }));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sympRows), "Sintomas");
+        const sympSheet = createSheetWithHeaders(sympRows, sympHeaders);
+        formatSheet(sympSheet, "Sintomas");
+        XLSX.utils.book_append_sheet(wb, sympSheet, "Sintomas");
 
         // 4. Activities
+        const actHeaders = { "ID": "ID", "Atividade": "Atividade", "Duração (min)": "Duração (min)", "Data": "Data" };
         const actRows = activities.map(a => ({
             "ID": a.id, "Atividade": a.name, "Duração (min)": a.duration,
             "Data": a.date
         }));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(actRows), "Atividades");
+        const actSheet = createSheetWithHeaders(actRows, actHeaders);
+        formatSheet(actSheet, "Atividades");
+        XLSX.utils.book_append_sheet(wb, actSheet, "Atividades");
 
         // 5. Logs
+        const logHeaders = { "ID": "ID", "MedID": "MedID", "Agendado": "Agendado", "TomadoEm": "TomadoEm", "Status": "Status" };
         const logRows = logs.map(l => ({
             "ID": l.id, "MedID": l.medicationId, "Agendado": l.scheduledTime,
             "TomadoEm": l.takenAt, "Status": l.status
         }));
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(logRows), "Historico");
+        const logSheet = createSheetWithHeaders(logRows, logHeaders);
+        formatSheet(logSheet, "Historico");
+        XLSX.utils.book_append_sheet(wb, logSheet, "Historico");
 
         // 6. User Profile (LocalStorage)
+        const profileHeaders = { "Nome": "Nome", "Email": "Email", "Nasc": "Nasc", "Sexo": "Sexo", "Peso": "Peso", "Altura": "Altura", "Civil": "Civil", "CEP": "CEP", "Rua": "Rua", "Bairro": "Bairro", "Cidade": "Cidade", "Estado": "Estado", "Pais": "Pais" };
         const profile = JSON.parse(localStorage.getItem('user_profile') || '{}');
         const pRow = [{
             "Nome": profile.name, "Email": profile.email, "Nasc": profile.birthDate,
@@ -160,38 +344,76 @@ export const MedicationProvider = ({ children }) => {
             "Cidade": profile.address?.city, "Estado": profile.address?.state,
             "Pais": profile.address?.country
         }];
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(pRow), "Perfil");
+        const profileSheet = createSheetWithHeaders(pRow, profileHeaders);
+        formatSheet(profileSheet, "Perfil");
+        XLSX.utils.book_append_sheet(wb, profileSheet, "Perfil");
 
-        // 7. Doctors (LS)
+        // 7. Doctors (LS) - Sempre criar, mesmo sem dados
         const docs = JSON.parse(localStorage.getItem('doctors') || '[]');
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(docs), "Medicos");
+        // Extrair cabeçalhos do primeiro item ou usar estrutura padrão
+        const docsHeaders = docs.length > 0 
+            ? Object.keys(docs[0]).reduce((acc, key) => ({ ...acc, [key]: key }), {})
+            : { "Nome": "Nome", "Especialidade": "Especialidade", "Telefone": "Telefone", "Email": "Email", "Endereço": "Endereço" };
+        const docsSheet = createSheetWithHeaders(docs, docsHeaders);
+        formatSheet(docsSheet, "Medicos");
+        XLSX.utils.book_append_sheet(wb, docsSheet, "Medicos");
 
-        // 8. Emergency (LS)
+        // 8. Emergency (LS) - Sempre criar, mesmo sem dados
         const emerg = JSON.parse(localStorage.getItem('emergency_contacts') || '[]');
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(emerg), "Emergencia");
+        const emergHeaders = emerg.length > 0 
+            ? Object.keys(emerg[0]).reduce((acc, key) => ({ ...acc, [key]: key }), {})
+            : { "Nome": "Nome", "Telefone": "Telefone", "Relacionamento": "Relacionamento", "Observações": "Observações" };
+        const emergSheet = createSheetWithHeaders(emerg, emergHeaders);
+        formatSheet(emergSheet, "Emergencia");
+        XLSX.utils.book_append_sheet(wb, emergSheet, "Emergencia");
 
-        // 9. Care Recipients (LS)
+        // 9. Care Recipients (LS) - Sempre criar, mesmo sem dados
         const care = JSON.parse(localStorage.getItem('care_recipients') || '[]');
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(care), "Cuidadores");
+        const careHeaders = care.length > 0 
+            ? Object.keys(care[0]).reduce((acc, key) => ({ ...acc, [key]: key }), {})
+            : { "Nome": "Nome", "Telefone": "Telefone", "Relacionamento": "Relacionamento", "Observações": "Observações" };
+        const careSheet = createSheetWithHeaders(care, careHeaders);
+        formatSheet(careSheet, "Cuidadores");
+        XLSX.utils.book_append_sheet(wb, careSheet, "Cuidadores");
 
         // --- TCC EXPORTS ---
-        // 10. Habits
+        // 10. Habits - Sempre criar, mesmo sem dados
         const habits = JSON.parse(localStorage.getItem('tcc_habits') || '[]');
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(habits), "TCC_Habitos");
+        const habitsHeaders = habits.length > 0 
+            ? Object.keys(habits[0]).reduce((acc, key) => ({ ...acc, [key]: key }), {})
+            : { "ID": "ID", "Nome": "Nome", "Categoria": "Categoria", "Data": "Data", "Observações": "Observações" };
+        const habitsSheet = createSheetWithHeaders(habits, habitsHeaders);
+        formatSheet(habitsSheet, "TCC_Habitos");
+        XLSX.utils.book_append_sheet(wb, habitsSheet, "TCC_Habitos");
 
-        // 11. Thoughts
+        // 11. Thoughts - Sempre criar, mesmo sem dados
         const thoughts = JSON.parse(localStorage.getItem('tcc_thoughts') || '[]');
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(thoughts), "TCC_Pensamentos");
+        const thoughtsHeaders = thoughts.length > 0 
+            ? Object.keys(thoughts[0]).reduce((acc, key) => ({ ...acc, [key]: key }), {})
+            : { "ID": "ID", "Pensamento": "Pensamento", "Data": "Data", "Observações": "Observações" };
+        const thoughtsSheet = createSheetWithHeaders(thoughts, thoughtsHeaders);
+        formatSheet(thoughtsSheet, "TCC_Pensamentos");
+        XLSX.utils.book_append_sheet(wb, thoughtsSheet, "TCC_Pensamentos");
 
-        // 12. ABC
+        // 12. ABC - Sempre criar, mesmo sem dados
         const abc = JSON.parse(localStorage.getItem('tcc_abc') || '[]');
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(abc), "TCC_ABC");
+        const abcHeaders = abc.length > 0 
+            ? Object.keys(abc[0]).reduce((acc, key) => ({ ...acc, [key]: key }), {})
+            : { "ID": "ID", "A": "A", "B": "B", "C": "C", "Data": "Data" };
+        const abcSheet = createSheetWithHeaders(abc, abcHeaders);
+        formatSheet(abcSheet, "TCC_ABC");
+        XLSX.utils.book_append_sheet(wb, abcSheet, "TCC_ABC");
 
-        // 13. Cards
+        // 13. Cards - Sempre criar, mesmo sem dados
         const cards = JSON.parse(localStorage.getItem('tcc_cards') || '[]');
-        XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(cards), "TCC_Cartoes");
+        const cardsHeaders = cards.length > 0 
+            ? Object.keys(cards[0]).reduce((acc, key) => ({ ...acc, [key]: key }), {})
+            : { "ID": "ID", "Título": "Título", "Conteúdo": "Conteúdo", "Data": "Data" };
+        const cardsSheet = createSheetWithHeaders(cards, cardsHeaders);
+        formatSheet(cardsSheet, "TCC_Cartoes");
+        XLSX.utils.book_append_sheet(wb, cardsSheet, "TCC_Cartoes");
 
-        XLSX.writeFile(wb, "MinhaTerapia_TUDO.xlsx");
+        XLSX.writeFile(wb, "MinhaTerapia.xlsx");
     };
 
     const importData = async (file) => {

@@ -246,11 +246,11 @@ const Progress = () => {
                 {/* --- SEÇÃO 1: SINAIS VITAIS --- */}
                 <div style={{ marginTop: 24, marginBottom: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                        <h3 style={{ fontSize: 18, margin: 0 }}>Sinais Vitais</h3>
+                        <h3 style={{ fontSize: 18, margin: 0, color: 'var(--color-text-primary)' }}>Sinais Vitais</h3>
                         <select
                             value={selectedClinical}
                             onChange={(e) => setSelectedClinical(e.target.value)}
-                            style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid #ddd', fontSize: 14 }}
+                            style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid var(--color-surface-dim)', fontSize: 14, backgroundColor: 'var(--color-surface)', color: 'var(--color-text-primary)' }}
                         >
                             <option value="blood_pressure">Pressão Arterial</option>
                             <option value="heart_rate">Frequência Cardíaca</option>
@@ -268,8 +268,8 @@ const Progress = () => {
                     />
 
                     {/* Recent Measurements List */}
-                    <div style={{ marginTop: 16, backgroundColor: '#f9f9f9', borderRadius: 8, padding: 12 }}>
-                        <h4 style={{ fontSize: 14, margin: '0 0 8px 0', color: '#666' }}>Últimos Registros</h4>
+                    <div style={{ marginTop: 16, backgroundColor: 'var(--color-surface)', borderRadius: 8, padding: 12 }}>
+                        <h4 style={{ fontSize: 14, margin: '0 0 8px 0', color: 'var(--color-text-secondary)' }}>Últimos Registros</h4>
                         <div style={{ maxHeight: 150, overflowY: 'auto' }}>
                             {measurements
                                 .filter(m => m.subtype === selectedClinical)
@@ -280,15 +280,15 @@ const Progress = () => {
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         padding: '6px 0',
-                                        borderBottom: idx < 9 ? '1px solid #eee' : 'none',
+                                        borderBottom: idx < 9 ? '1px solid var(--color-surface-dim)' : 'none',
                                         fontSize: 13
                                     }}>
-                                        <span style={{ color: '#666' }}>{format(parseISO(m.date), 'dd/MM/yyyy HH:mm')}</span>
-                                        <span style={{ fontWeight: 500, color: '#333' }}>{m.value} {m.unit}</span>
+                                        <span style={{ color: 'var(--color-text-secondary)' }}>{format(parseISO(m.date), 'dd/MM/yyyy HH:mm')}</span>
+                                        <span style={{ fontWeight: 500, color: 'var(--color-text-primary)' }}>{m.value} {m.unit}</span>
                                     </div>
                                 ))}
                             {measurements.filter(m => m.subtype === selectedClinical).length === 0 && (
-                                <p style={{ fontSize: 12, color: '#999', margin: 0 }}>Nenhum registro ainda.</p>
+                                <p style={{ fontSize: 12, color: 'var(--color-text-disabled)', margin: 0 }}>Nenhum registro ainda.</p>
                             )}
                         </div>
                     </div>
@@ -297,11 +297,11 @@ const Progress = () => {
                 {/* --- SEÇÃO 2: MEDIDAS CORPORAIS --- */}
                 <div style={{ marginTop: 24, marginBottom: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                        <h3 style={{ fontSize: 18, margin: 0 }}>Medidas Corporais</h3>
+                        <h3 style={{ fontSize: 18, margin: 0, color: 'var(--color-text-primary)' }}>Medidas Corporais</h3>
                         <select
                             value={selectedBody}
                             onChange={(e) => setSelectedBody(e.target.value)}
-                            style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid #ddd', fontSize: 14, maxWidth: '50%' }}
+                            style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid var(--color-surface-dim)', fontSize: 14, maxWidth: '50%', backgroundColor: 'var(--color-surface)', color: 'var(--color-text-primary)' }}
                         >
                             <option value="weight">Peso</option>
                             <optgroup label="Tronco">
@@ -354,8 +354,8 @@ const Progress = () => {
                     />
 
                     {/* Recent Measurements List */}
-                    <div style={{ marginTop: 16, backgroundColor: '#f9f9f9', borderRadius: 8, padding: 12 }}>
-                        <h4 style={{ fontSize: 14, margin: '0 0 8px 0', color: '#666' }}>Últimos Registros</h4>
+                    <div style={{ marginTop: 16, backgroundColor: 'var(--color-surface)', borderRadius: 8, padding: 12 }}>
+                        <h4 style={{ fontSize: 14, margin: '0 0 8px 0', color: 'var(--color-text-secondary)' }}>Últimos Registros</h4>
                         <div style={{ maxHeight: 150, overflowY: 'auto' }}>
                             {measurements
                                 .filter(m => m.subtype === selectedBody)
@@ -366,15 +366,15 @@ const Progress = () => {
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         padding: '6px 0',
-                                        borderBottom: idx < 9 ? '1px solid #eee' : 'none',
+                                        borderBottom: idx < 9 ? '1px solid var(--color-surface-dim)' : 'none',
                                         fontSize: 13
                                     }}>
-                                        <span style={{ color: '#666' }}>{format(parseISO(m.date), 'dd/MM/yyyy HH:mm')}</span>
-                                        <span style={{ fontWeight: 500, color: '#333' }}>{m.value} {m.unit}</span>
+                                        <span style={{ color: 'var(--color-text-secondary)' }}>{format(parseISO(m.date), 'dd/MM/yyyy HH:mm')}</span>
+                                        <span style={{ fontWeight: 500, color: 'var(--color-text-primary)' }}>{m.value} {m.unit}</span>
                                     </div>
                                 ))}
                             {measurements.filter(m => m.subtype === selectedBody).length === 0 && (
-                                <p style={{ fontSize: 12, color: '#999', margin: 0 }}>Nenhum registro ainda.</p>
+                                <p style={{ fontSize: 12, color: 'var(--color-text-disabled)', margin: 0 }}>Nenhum registro ainda.</p>
                             )}
                         </div>
                     </div>
@@ -383,11 +383,11 @@ const Progress = () => {
                 {/* --- SEÇÃO 3: EXAMES --- */}
                 <div style={{ marginTop: 24, marginBottom: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                        <h3 style={{ fontSize: 18, margin: 0 }}>Exames Laboratoriais</h3>
+                        <h3 style={{ fontSize: 18, margin: 0, color: 'var(--color-text-primary)' }}>Exames Laboratoriais</h3>
                         <select
                             value={selectedLab}
                             onChange={(e) => setSelectedLab(e.target.value)}
-                            style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid #ddd', fontSize: 14, maxWidth: '50%' }}
+                            style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid var(--color-surface-dim)', fontSize: 14, maxWidth: '50%', backgroundColor: 'var(--color-surface)', color: 'var(--color-text-primary)' }}
                         >
                             <optgroup label="Destaques / Diabetes">
                                 <option value="glucose">Glicose</option>
@@ -435,8 +435,8 @@ const Progress = () => {
                     />
 
                     {/* Recent Measurements List */}
-                    <div style={{ marginTop: 16, backgroundColor: '#f9f9f9', borderRadius: 8, padding: 12 }}>
-                        <h4 style={{ fontSize: 14, margin: '0 0 8px 0', color: '#666' }}>Últimos Registros</h4>
+                    <div style={{ marginTop: 16, backgroundColor: 'var(--color-surface)', borderRadius: 8, padding: 12 }}>
+                        <h4 style={{ fontSize: 14, margin: '0 0 8px 0', color: 'var(--color-text-secondary)' }}>Últimos Registros</h4>
                         <div style={{ maxHeight: 150, overflowY: 'auto' }}>
                             {measurements
                                 .filter(m => m.subtype === selectedLab)
@@ -447,15 +447,15 @@ const Progress = () => {
                                         display: 'flex',
                                         justifyContent: 'space-between',
                                         padding: '6px 0',
-                                        borderBottom: idx < 9 ? '1px solid #eee' : 'none',
+                                        borderBottom: idx < 9 ? '1px solid var(--color-surface-dim)' : 'none',
                                         fontSize: 13
                                     }}>
-                                        <span style={{ color: '#666' }}>{format(parseISO(m.date), 'dd/MM/yyyy HH:mm')}</span>
-                                        <span style={{ fontWeight: 500, color: '#333' }}>{m.value} {m.unit}</span>
+                                        <span style={{ color: 'var(--color-text-secondary)' }}>{format(parseISO(m.date), 'dd/MM/yyyy HH:mm')}</span>
+                                        <span style={{ fontWeight: 500, color: 'var(--color-text-primary)' }}>{m.value} {m.unit}</span>
                                     </div>
                                 ))}
                             {measurements.filter(m => m.subtype === selectedLab).length === 0 && (
-                                <p style={{ fontSize: 12, color: '#999', margin: 0 }}>Nenhum registro ainda.</p>
+                                <p style={{ fontSize: 12, color: 'var(--color-text-disabled)', margin: 0 }}>Nenhum registro ainda.</p>
                             )}
                         </div>
                     </div>
@@ -463,7 +463,7 @@ const Progress = () => {
 
                 {/* --- ACTIVITY STATS --- */}
                 <div style={{ marginTop: 24, marginBottom: 8 }}>
-                    <h3 style={{ fontSize: 18, marginBottom: 12 }}>Atividade Física</h3>
+                    <h3 style={{ fontSize: 18, marginBottom: 12, color: 'var(--color-text-primary)' }}>Atividade Física</h3>
                     <div className="stats-grid">
                         <div className="stat-card">
                             <Zap size={24} color="#FF9800" />
@@ -484,7 +484,7 @@ const Progress = () => {
 
                 {/* --- SYMPTOM STATS --- */}
                 <div style={{ marginTop: 24, marginBottom: 8 }}>
-                    <h3 style={{ fontSize: 18, marginBottom: 12 }}>Humor & Sintomas</h3>
+                    <h3 style={{ fontSize: 18, marginBottom: 12, color: 'var(--color-text-primary)' }}>Humor & Sintomas</h3>
                     <div className="stats-grid">
                         <div className="stat-card">
                             <Smile size={24} color="#9C27B0" />

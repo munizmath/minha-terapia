@@ -45,9 +45,12 @@ Aplicação web progressiva (PWA) para gerenciamento de medicamentos, medições
 - 👨‍⚕️ **Gestão de Especialistas**: Mantenha contatos de médicos, psicólogos e profissionais de saúde
 - 🆘 **Contatos de Emergência**: Acesso rápido a contatos importantes
 - 👥 **Cuidadores**: Gerencie múltiplos perfis de pessoas sob cuidado
+- 🚨 **Gerenciamento de Alergias**: Registre alergias conhecidas e receba alertas
 - 📤 **Exportação/Importação**: Backup e restauração de dados via Excel (XLSX)
 - 🔔 **Notificações**: Lembretes automáticos para horários de medicamentos
 - 🌓 **Tema Claro/Escuro**: Interface adaptável às preferências do usuário
+- 🔒 **Criptografia de Dados**: Proteção opcional de dados sensíveis (AES-GCM 256-bit)
+- 🔐 **Autenticação**: Sistema de login com múltiplos perfis de usuário
 - 📱 **PWA**: Instalável como aplicativo nativo em dispositivos móveis
 
 ## 🛠 Tecnologias
@@ -210,6 +213,8 @@ app/
 - Agendamento flexível (diário, dias específicos da semana)
 - Histórico completo de tomadas
 - Alertas de estoque baixo
+- **Verificação de interações medicamentosas** com alertas visuais
+- **Validação de alergias** conhecidas ao adicionar medicamentos
 - Edição e remoção de medicamentos
 
 ### Medições de Saúde
@@ -241,8 +246,9 @@ app/
 - **Especialistas**: Cadastro de médicos, psicólogos e profissionais de saúde
 - **Contatos de Emergência**: Acesso rápido em situações críticas com ligação direta
 - **Cuidadores**: Gerenciamento de múltiplos perfis de pessoas sob cuidado
+- **Alergias**: Cadastro e gerenciamento de alergias conhecidas
 - **Gerenciamento de Dados**: Exportação e importação via Excel (XLSX)
-- **Configurações**: Preferências, tema e notificações
+- **Configurações**: Preferências, tema, notificações e segurança (criptografia)
 
 ## 📜 Scripts Disponíveis
 
@@ -262,10 +268,13 @@ app/
 1. **Armazenamento Local (localStorage)**
    - **Risco**: Dados sensíveis de saúde armazenados sem criptografia no navegador
    - **Impacto**: Acesso não autorizado a informações médicas em dispositivos compartilhados
-   - **Controle Atual**: Aplicação cliente-side sem backend; dados permanecem no dispositivo
+   - **Controle Implementado**: 
+     - ✅ Criptografia opcional AES-GCM 256-bit para dados sensíveis
+     - ✅ Derivação de chave com PBKDF2 (100.000 iterações)
+     - ✅ Autenticação com múltiplos perfis de usuário
+     - ✅ Hash de senha com PBKDF2
+     - ✅ Sessão com timeout automático
    - **Recomendação**: Para produção, implementar:
-     - Criptografia de dados sensíveis antes do armazenamento
-     - Autenticação e autorização (RBAC)
      - Backend seguro com validação de entrada
      - Logs estruturados sem PII
 
@@ -293,8 +302,8 @@ app/
 
 ### Checklist de Segurança para Deploy
 
-- [ ] Implementar autenticação e autorização (RBAC)
-- [ ] Criptografar dados sensíveis antes do armazenamento
+- [x] Implementar autenticação e autorização (RBAC) - **Implementado v1.3.1**
+- [x] Criptografar dados sensíveis antes do armazenamento - **Implementado v1.3.1 (opcional)**
 - [ ] Configurar HTTPS obrigatório
 - [ ] Implementar validação server-side
 - [ ] Configurar Content Security Policy (CSP)
@@ -337,10 +346,34 @@ Para contribuições, abra uma issue ou pull request seguindo os padrões de seg
 
 ---
 
-**Versão**: 1.3.0  
+**Versão**: 1.3.1  
 **Última Atualização**: 13-12-2025
 
 ### Changelog
+
+#### v1.3.1 (13-12-2025)
+- 🔒 **NOVO**: Sistema de Criptografia de Dados Sensíveis (AES-GCM 256-bit)
+  - Criptografia opcional para dados de saúde no localStorage
+  - Derivação de chave com PBKDF2 (100.000 iterações)
+  - Migração automática de dados existentes
+  - Configurável em Configurações > Segurança
+- 🔐 **NOVO**: Autenticação e Múltiplos Usuários
+  - Sistema de login/registro com hash de senha (PBKDF2)
+  - Suporte a múltiplos perfis de usuário
+  - Sessão com timeout automático (30 minutos)
+  - Acesso opcional sem login na primeira vez
+- ⚠️ **NOVO**: Verificação de Interações Medicamentosas
+  - Base de dados de interações medicamentosas comuns
+  - Alertas visuais para interações graves, moderadas e leves
+  - Validação em tempo real ao adicionar medicamentos
+- 🚨 **NOVO**: Gerenciamento de Alergias
+  - Cadastro de alergias conhecidas
+  - Alertas automáticos ao adicionar medicamentos com alergias
+  - Página dedicada em Suporte > Alergias
+- 🎨 Melhorias na interface de Configurações
+  - Nova seção "Segurança" com opções de criptografia
+  - Interface aprimorada para gerenciamento de dados
+- 🐛 Correções de bugs e melhorias de UX
 
 #### v1.3.0 (13-12-2025)
 - ✨ Adicionado módulo completo de Psicoterapia (TCC)

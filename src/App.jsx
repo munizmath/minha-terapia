@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import MedicationList from './pages/MedicationList';
 import Dashboard from './pages/Dashboard';
@@ -20,10 +20,16 @@ import HabitFrequency from './pages/psicoterapia/HabitFrequency';
 import ThoughtRecord from './pages/psicoterapia/ThoughtRecord';
 import CopingCards from './pages/psicoterapia/CopingCards';
 import AbcRecord from './pages/psicoterapia/AbcRecord';
+import Login from './pages/auth/Login';
+import Allergies from './pages/support/Allergies';
+import ProtectedRoute from './components/ProtectedRoute';
+import { useAuth } from './context/AuthContext';
 import './components/layout/Layout.css';
 
 
-function App() {
+function AppContent() {
+  const { isAuthenticated } = useAuth();
+
   // Apply theme on load
   React.useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -38,7 +44,15 @@ function App() {
   return (
     <BrowserRouter basename={basePath}>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        {/* Rota pública de login */}
+        <Route path="/login" element={<Login />} />
+        
+        {/* Rotas protegidas */}
+        <Route path="/" element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }>
           <Route index element={<Dashboard />} />
           <Route path="medications" element={<MedicationList />} />
           <Route path="medications/add" element={<AddMedication />} />
@@ -51,6 +65,7 @@ function App() {
           <Route path="psicoterapia/abc" element={<AbcRecord />} />
           <Route path="support" element={<Support />} />
           <Route path="support/specialists" element={<Specialists />} />
+          <Route path="support/allergies" element={<Allergies />} />
           <Route path="support/data" element={<DataManagement />} />
           <Route path="support/settings" element={<Settings />} />
           <Route path="support/care-recipients" element={<CareRecipients />} />
@@ -58,11 +73,19 @@ function App() {
           <Route path="support/profile" element={<UserProfile />} />
           <Route path="tracker/symptom" element={<SymptomTracker />} />
           <Route path="tracker/activity" element={<ActivityTracker />} />
-          
         </Route>
+
+        {/* Redirecionar para login se não autenticado */}
+        {!isAuthenticated && (
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        )}
       </Routes>
     </BrowserRouter>
   );
+}
+
+function App() {
+  return <AppContent />;
 }
 
 export default App;
