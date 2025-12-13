@@ -1,6 +1,6 @@
 # Minha Terapia
 
-Aplicação web progressiva (PWA) para gerenciamento de medicamentos, medições de saúde, rastreamento de sintomas e atividades. Desenvolvida com React e Vite, oferece uma interface moderna e responsiva para auxiliar no cuidado da saúde pessoal.
+Aplicação web progressiva (PWA) para gerenciamento de medicamentos, medições de saúde, rastreamento de sintomas e atividades, com módulo completo de **Psicoterapia Cognitivo-Comportamental (TCC)**. Desenvolvida com React e Vite, oferece uma interface moderna e responsiva para auxiliar no cuidado da saúde física e mental.
 
 ## 🌐 Acesso Web
 
@@ -27,13 +27,22 @@ Aplicação web progressiva (PWA) para gerenciamento de medicamentos, medições
 
 ## 🎯 Características
 
+### Saúde Física
 - ✅ **Gerenciamento de Medicamentos**: Adicione, edite e remova medicamentos com horários personalizados
-- 📊 **Dashboard Interativo**: Visualize medicamentos agendados e medições do dia
-- 📈 **Acompanhamento de Progresso**: Gráficos e estatísticas de adesão ao tratamento
-- 📝 **Medições de Saúde**: Registre pressão arterial, glicemia, peso e outras métricas
+- 📊 **Dashboard Interativo**: Visualize medicamentos agendados, medições e atividades do dia
+- 📈 **Acompanhamento de Progresso**: Gráficos avançados e estatísticas de adesão ao tratamento
+- 📝 **Medições de Saúde**: Registre pressão arterial, glicemia, peso, temperatura e outras métricas
 - 🎭 **Rastreamento de Sintomas**: Monitore humor, dor, fadiga, ansiedade e qualidade do sono
-- 🏃 **Rastreamento de Atividades**: Registre atividades físicas e exercícios
-- 👨‍⚕️ **Gestão de Profissionais**: Mantenha contatos de médicos e profissionais de saúde
+- 🏃 **Rastreamento de Atividades**: Registre atividades físicas, exercícios e terapias
+
+### Psicoterapia (TCC)
+- 🔄 **Frequência de Hábitos**: Registre e monitore a frequência de comportamentos e hábitos
+- 💭 **Registro de Pensamentos Disfuncionais (RPD)**: Identifique e trabalhe pensamentos negativos
+- 📋 **Registro ABC**: Análise de Antecedentes, Comportamentos e Consequências
+- 🎴 **Cartões de Enfrentamento**: Estratégias e técnicas para momentos difíceis
+
+### Suporte e Configurações
+- 👨‍⚕️ **Gestão de Especialistas**: Mantenha contatos de médicos, psicólogos e profissionais de saúde
 - 🆘 **Contatos de Emergência**: Acesso rápido a contatos importantes
 - 👥 **Cuidadores**: Gerencie múltiplos perfis de pessoas sob cuidado
 - 📤 **Exportação/Importação**: Backup e restauração de dados via Excel (XLSX)
@@ -172,7 +181,8 @@ app/
 │   ├── context/           # Context API (MedicationContext)
 │   ├── hooks/             # Custom hooks (useNotifications)
 │   ├── pages/             # Páginas/rotas da aplicação
-│   │   ├── support/       # Páginas de suporte (perfil, médicos, etc.)
+│   │   ├── psicoterapia/  # Módulo de TCC (hábitos, pensamentos, ABC, cartões)
+│   │   ├── support/       # Páginas de suporte (perfil, especialistas, etc.)
 │   │   └── tracker/       # Rastreadores (sintomas, atividades)
 │   ├── theme/             # Variáveis de tema CSS
 │   ├── utils/             # Funções utilitárias (scheduler)
@@ -191,7 +201,8 @@ app/
 ### Dashboard
 - Visualização em timeline dos medicamentos agendados para o dia
 - Registro rápido de tomada de medicamentos
-- Medições do dia atual
+- Medições do dia atual com gráficos
+- Atividades e sintomas recentes
 - Acesso rápido às principais funcionalidades
 
 ### Gerenciamento de Medicamentos
@@ -199,22 +210,39 @@ app/
 - Agendamento flexível (diário, dias específicos da semana)
 - Histórico completo de tomadas
 - Alertas de estoque baixo
+- Edição e remoção de medicamentos
 
 ### Medições de Saúde
 - Registro de pressão arterial, glicemia, peso, temperatura
-- Visualização histórica e gráficos de tendência
+- Visualização histórica com gráficos de tendência
+- Gráficos interativos para análise de evolução
+- Múltiplos tipos de medições em um único registro
 
 ### Rastreamento
-- **Sintomas**: Humor, dor, fadiga, ansiedade, qualidade do sono
-- **Atividades**: Exercícios físicos e atividades diárias
+- **Sintomas**: Humor (5 níveis), dor, fadiga, ansiedade, qualidade do sono
+- **Atividades**: Exercícios físicos, terapias e atividades diárias
+- Visualização em cards e timeline
+- Histórico completo com filtros
+
+### Psicoterapia (TCC)
+- **Frequência de Hábitos**: Registro diário de comportamentos e hábitos com análise de frequência
+- **Registro de Pensamentos Disfuncionais (RPD)**: Identificação de pensamentos negativos, emoções e comportamentos associados
+- **Registro ABC**: Análise estruturada de Antecedentes, Comportamentos e Consequências
+- **Cartões de Enfrentamento**: Criação e gerenciamento de estratégias de enfrentamento para situações difíceis
+
+### Acompanhamento de Progresso
+- Gráficos avançados de adesão ao tratamento
+- Estatísticas de medicamentos, medições e sintomas
+- Visualização temporal de evolução
+- Análise de tendências e padrões
 
 ### Suporte
-- **Perfil do Usuário**: Dados pessoais e informações de saúde
-- **Médicos**: Cadastro de profissionais de saúde
-- **Contatos de Emergência**: Acesso rápido em situações críticas
-- **Cuidadores**: Gerenciamento de múltiplos perfis
-- **Gerenciamento de Dados**: Exportação e importação via Excel
-- **Configurações**: Preferências e tema
+- **Perfil do Usuário**: Dados pessoais, informações de saúde e endereço completo
+- **Especialistas**: Cadastro de médicos, psicólogos e profissionais de saúde
+- **Contatos de Emergência**: Acesso rápido em situações críticas com ligação direta
+- **Cuidadores**: Gerenciamento de múltiplos perfis de pessoas sob cuidado
+- **Gerenciamento de Dados**: Exportação e importação via Excel (XLSX)
+- **Configurações**: Preferências, tema e notificações
 
 ## 📜 Scripts Disponíveis
 
@@ -309,5 +337,22 @@ Para contribuições, abra uma issue ou pull request seguindo os padrões de seg
 
 ---
 
-**Versão**: 1.2.0  
-**Última Atualização**: 12-2025
+**Versão**: 1.3.0  
+**Última Atualização**: 13-12-2025
+
+### Changelog
+
+#### v1.3.0 (13-12-2025)
+- ✨ Adicionado módulo completo de Psicoterapia (TCC)
+- ✨ Novo: Registro ABC (Antecedente, Comportamento, Consequência)
+- ✨ Novo: Cartões de Enfrentamento
+- ✨ Melhorias no Dashboard com novos componentes visuais
+- ✨ Gráficos avançados na página de Progresso
+- 🔄 Renomeado "Médicos" para "Especialistas"
+- 🎨 Novos componentes: ActivityItem, MeasurementChart, SymptomItem
+- 🐛 Correções e melhorias de UX
+
+#### v1.2.0 (12-12-2025)
+- ✨ Adicionado módulo de Psicoterapia com Frequência de Hábitos e RPD
+- ✨ Melhorias no rastreamento de sintomas (5 níveis de humor)
+- 🎨 Interface aprimorada
