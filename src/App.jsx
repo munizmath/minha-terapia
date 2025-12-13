@@ -22,6 +22,7 @@ import CopingCards from './pages/psicoterapia/CopingCards';
 import AbcRecord from './pages/psicoterapia/AbcRecord';
 import './components/layout/Layout.css';
 
+
 function App() {
   // Apply theme on load
   React.useEffect(() => {
@@ -57,6 +58,7 @@ function App() {
           <Route path="support/profile" element={<UserProfile />} />
           <Route path="tracker/symptom" element={<SymptomTracker />} />
           <Route path="tracker/activity" element={<ActivityTracker />} />
+          
         </Route>
       </Routes>
     </BrowserRouter>

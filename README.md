@@ -309,5 +309,5 @@ Para contribuições, abra uma issue ou pull request seguindo os padrões de seg
 
 ---
 
-**Versão**: 0.0.0  
-**Última Atualização**: 2024
+**Versão**: 1.2.0  
+**Última Atualização**: 12-2025
