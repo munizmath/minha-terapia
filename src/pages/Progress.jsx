@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useMedications } from '../context/MedicationContext';
-import { BarChart3, CheckCircle, XCircle, Calendar, AlertCircle, Zap, Smile } from 'lucide-react';
+import { BarChart3, CheckCircle, XCircle, Calendar, AlertCircle, Zap, Smile, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { startOfWeek, endOfWeek, eachDayOfInterval, format, isSameDay, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import MeasurementChart from '../components/dashboard/MeasurementChart';
 import './Progress.css';
 
 const Progress = () => {
+    const navigate = useNavigate();
     const { logs, medications, measurements, activities, symptoms } = useMedications();
     const today = new Date();
     const [selectedClinical, setSelectedClinical] = useState('blood_pressure');
@@ -180,6 +182,15 @@ const Progress = () => {
         <div className="progress-page">
             <header className="page-header">
                 <h1>Meu Progresso</h1>
+                {symptoms.length > 0 && (
+                    <button 
+                        className="icon-btn-primary" 
+                        onClick={() => navigate('/analysis/symptoms')}
+                        title="Análise de Sintomas"
+                    >
+                        <TrendingUp size={24} />
+                    </button>
+                )}
             </header>
 
             <div className="progress-container">

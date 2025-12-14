@@ -1,0 +1,170 @@
+.mood-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--color-surface);
+    border-radius: 12px;
+    border: 1px solid var(--color-surface-dim);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+}
+
+.mood-form {
+    background: var(--color-surface);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--color-surface-dim);
+    margin-bottom: 24px;
+}
+
+.emotions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.emotion-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 8px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background: var(--color-surface);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.emotion-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.emotion-btn.active {
+    border-width: 2px;
+}
+
+.emotion-emoji {
+    font-size: 2rem;
+}
+
+.emotion-label {
+    font-size: 0.85rem;
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.intensity-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.mood-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mood-entry {
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-dim);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.entry-date {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+}
+
+.entry-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn-small {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.icon-btn-small:hover {
+    background: var(--color-surface-dim);
+    color: var(--color-text-primary);
+}
+
+.entry-emotions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.emotion-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border: 1px solid;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background: var(--color-surface);
+}
+
+.entry-intensity {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.entry-context,
+.entry-notes {
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+.entry-context strong,
+.entry-notes strong {
+    color: var(--color-text-primary);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-text-secondary);
+}
+

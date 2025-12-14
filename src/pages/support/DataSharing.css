@@ -1,0 +1,126 @@
+.shares-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.share-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-dim);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.share-card.inactive {
+    opacity: 0.6;
+}
+
+.share-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 12px;
+}
+
+.share-header h3 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+}
+
+.share-date {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #4caf50;
+    color: white;
+}
+
+.status-badge.expired {
+    background: #9e9e9e;
+    color: white;
+}
+
+.status-badge.revoked {
+    background: #f44336;
+    color: white;
+}
+
+.share-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.share-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.share-form {
+    background: var(--color-surface);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--color-surface-dim);
+}
+
+.share-form h2 {
+    margin: 0 0 20px 0;
+    font-size: 1.2rem;
+    color: var(--color-text-primary);
+}
+
+.data-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.data-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-dim);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.data-checkbox:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface-dim);
+}
+
+.data-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.data-checkbox span {
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+}
+

@@ -1,0 +1,26 @@
+.notification-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+.notification-wrapper {
+    position: absolute;
+    right: 20px;
+    pointer-events: auto;
+    max-width: 350px;
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+    .notification-wrapper {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
+

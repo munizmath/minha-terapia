@@ -64,6 +64,15 @@ const Support = () => {
                         </div>
                         <ChevronRight size={20} className="chevron" />
                     </div>
+                    <div className="divider"></div>
+                    <div className="menu-item" onClick={() => navigate('/support/sharing')}>
+                        <div className="icon-box blue"><Database size={20} /></div>
+                        <div className="menu-text">
+                            <h3>Compartilhar Dados</h3>
+                            <p>Compartilhar com profissionais</p>
+                        </div>
+                        <ChevronRight size={20} className="chevron" />
+                    </div>
                 </div>
 
                 {/* Resources */}
@@ -87,6 +96,15 @@ const Support = () => {
                         <div className="menu-text">
                             <h3>Configurações</h3>
                             <p>Notificações, Sons, Aparência</p>
+                        </div>
+                        <ChevronRight size={20} className="chevron" />
+                    </div>
+                    <div className="divider"></div>
+                    <div className="menu-item" onClick={() => navigate('/goals')}>
+                        <div className="icon-box green"><Heart size={20} /></div>
+                        <div className="menu-text">
+                            <h3>Metas de Saúde</h3>
+                            <p>Acompanhar objetivos de tratamento</p>
                         </div>
                         <ChevronRight size={20} className="chevron" />
                     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Save, Trash2, ChevronDown, ChevronUp, Edit2 } from 'lucide-react';
+import { ArrowLeft, Plus, Save, Trash2, ChevronDown, ChevronUp, Edit2, TrendingUp } from 'lucide-react';
 import '../support/SubPage.css';
 
 const ThoughtRecord = () => {
@@ -73,9 +73,18 @@ const ThoughtRecord = () => {
                 </button>
                 <h1>{isAdding ? (form.id ? 'Editar Pensamento' : 'Novo Pensamento') : 'Registro de Pensamentos'}</h1>
                 {!isAdding && (
-                    <button className="icon-btn-primary" onClick={() => { setForm({ id: null, date: new Date().toISOString().slice(0, 16), situation: '', emotion: '', automaticThought: '', distortion: '', rationalResponse: '', outcome: '' }); setIsAdding(true); }}>
-                        <Plus size={24} />
-                    </button>
+                    <>
+                        <button 
+                            className="icon-btn-primary" 
+                            onClick={() => navigate('/psicoterapia/thought-patterns')}
+                            title="Análise de Padrões"
+                        >
+                            <TrendingUp size={24} />
+                        </button>
+                        <button className="icon-btn-primary" onClick={() => { setForm({ id: null, date: new Date().toISOString().slice(0, 16), situation: '', emotion: '', automaticThought: '', distortion: '', rationalResponse: '', outcome: '' }); setIsAdding(true); }}>
+                            <Plus size={24} />
+                        </button>
+                    </>
                 )}
             </header>
 

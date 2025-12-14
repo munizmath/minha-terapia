@@ -20,6 +20,12 @@ import HabitFrequency from './pages/psicoterapia/HabitFrequency';
 import ThoughtRecord from './pages/psicoterapia/ThoughtRecord';
 import CopingCards from './pages/psicoterapia/CopingCards';
 import AbcRecord from './pages/psicoterapia/AbcRecord';
+import Mindfulness from './pages/psicoterapia/Mindfulness';
+import MoodDiary from './pages/psicoterapia/MoodDiary';
+import ThoughtPatterns from './pages/psicoterapia/ThoughtPatterns';
+import Goals from './pages/Goals';
+import DataSharing from './pages/support/DataSharing';
+import SymptomAnalysis from './pages/SymptomAnalysis';
 import Login from './pages/auth/Login';
 import Allergies from './pages/support/Allergies';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -63,6 +69,12 @@ function AppContent() {
           <Route path="psicoterapia/thoughts" element={<ThoughtRecord />} />
           <Route path="psicoterapia/cards" element={<CopingCards />} />
           <Route path="psicoterapia/abc" element={<AbcRecord />} />
+          <Route path="psicoterapia/mindfulness" element={<Mindfulness />} />
+          <Route path="psicoterapia/mood" element={<MoodDiary />} />
+          <Route path="psicoterapia/thought-patterns" element={<ThoughtPatterns />} />
+          <Route path="goals" element={<Goals />} />
+          <Route path="support/sharing" element={<DataSharing />} />
+          <Route path="analysis/symptoms" element={<SymptomAnalysis />} />
           <Route path="support" element={<Support />} />
           <Route path="support/specialists" element={<Specialists />} />
           <Route path="support/allergies" element={<Allergies />} />

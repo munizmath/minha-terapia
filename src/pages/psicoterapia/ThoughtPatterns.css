@@ -1,0 +1,132 @@
+.pattern-section {
+    margin-bottom: 32px;
+    padding: 16px;
+    background: var(--color-surface);
+    border-radius: 12px;
+    border: 1px solid var(--color-surface-dim);
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+}
+
+.pattern-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pattern-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-dim);
+    border-radius: 8px;
+}
+
+.pattern-rank {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    min-width: 40px;
+    text-align: center;
+}
+
+.pattern-info {
+    flex: 1;
+}
+
+.pattern-info h3 {
+    margin: 0 0 4px 0;
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+}
+
+.pattern-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.pattern-bar {
+    width: 100px;
+    height: 8px;
+    background: var(--color-surface-dim);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pattern-fill {
+    height: 100%;
+    background: var(--color-primary);
+    transition: width 0.3s;
+}
+
+.emotion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.emotion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-dim);
+    border-radius: 8px;
+}
+
+.emotion-name {
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.emotion-count {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.suggestion-item {
+    padding: 16px;
+    background: rgba(0, 150, 136, 0.1);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 8px;
+}
+
+.suggestion-item strong {
+    color: var(--color-text-primary);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.suggestion-item p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--color-text-secondary);
+}
+
+.empty-state p {
+    margin: 8px 0;
+}
+

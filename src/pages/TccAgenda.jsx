@@ -1,7 +1,7 @@
 /* src/pages/TccAgenda.jsx */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Repeat, BookOpen, Layers, GitCommit } from 'lucide-react';
+import { Repeat, BookOpen, Layers, GitCommit, Heart } from 'lucide-react';
 import './Support.css';
 
 const TccAgenda = () => {
@@ -54,6 +54,28 @@ const TccAgenda = () => {
                         <div className="menu-text">
                             <h3>Cartões de Enfrentamento</h3>
                             <p>Estratégias para momentos difíceis</p>
+                        </div>
+                    </div>
+
+                    <div className="divider"></div>
+
+                    {/* MINDFULNESS */}
+                    <div className="menu-item" onClick={() => navigate('/psicoterapia/mindfulness')}>
+                        <div className="icon-box teal"><Heart size={20} /></div>
+                        <div className="menu-text">
+                            <h3>Mindfulness & Relaxamento</h3>
+                            <p>Exercícios de respiração e relaxamento</p>
+                        </div>
+                    </div>
+
+                    <div className="divider"></div>
+
+                    {/* DIÁRIO DE HUMOR */}
+                    <div className="menu-item" onClick={() => navigate('/psicoterapia/mood')}>
+                        <div className="icon-box pink"><Heart size={20} /></div>
+                        <div className="menu-text">
+                            <h3>Diário de Humor</h3>
+                            <p>Registro de emoções e sentimentos</p>
                         </div>
                     </div>
                 </div>

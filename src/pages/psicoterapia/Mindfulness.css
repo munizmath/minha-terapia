@@ -1,0 +1,167 @@
+.mindfulness-section {
+    margin-bottom: 32px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+}
+
+.exercises-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.exercise-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-dim);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.exercise-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-primary);
+}
+
+.exercise-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.exercise-card h3 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+}
+
+.exercise-card p {
+    margin: 0 0 8px 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.exercise-duration {
+    display: inline-block;
+    padding: 4px 8px;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.sounds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.sound-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-dim);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.sound-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.sound-card span {
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+    font-weight: 500;
+}
+
+.sound-toggle {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sound-toggle:hover {
+    background: var(--color-primary-dark, #00796b);
+    transform: scale(1.1);
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-dim);
+    border-radius: 8px;
+}
+
+.history-icon {
+    font-size: 2rem;
+}
+
+.history-info {
+    flex: 1;
+}
+
+.history-info h4 {
+    margin: 0 0 4px 0;
+    font-size: 0.95rem;
+    color: var(--color-text-primary);
+}
+
+.history-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.history-date {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+}
+
+.exercise-active {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.exercise-active h2 {
+    color: var(--color-text-primary);
+    margin-bottom: 16px;
+}
+
+.exercise-active p {
+    color: var(--color-text-secondary);
+    margin-bottom: 24px;
+}
+

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as XLSX from 'xlsx-js-style';
 import { useNotifications } from '../hooks/useNotifications';
 import { useEncryption } from '../hooks/useEncryption';
+import { useNotificationContext } from './NotificationContext';
 
 const MedicationContext = createContext();
 
@@ -16,6 +17,7 @@ export const useMedications = () => {
 
 export const MedicationProvider = ({ children }) => {
     const { encryptionEnabled, readEncryptedData, saveEncryptedData } = useEncryption();
+    const notificationContext = useNotificationContext();
 
     // Função auxiliar para carregar dados (com ou sem criptografia)
     const loadData = async (key, defaultValue = []) => {
@@ -100,8 +102,8 @@ export const MedicationProvider = ({ children }) => {
         }
     }, [activities, encryptionEnabled, isLoading]);
 
-    // Init Notifications
-    const { sendStockAlert } = useNotifications(medications, logs);
+    // Init Notifications with snooze support
+    const { sendStockAlert } = useNotifications(medications, logs, notificationContext);
 
     // --- ACTIONS ---
     const addMedication = (medication) => {

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bell, Moon, Trash2, Lock, Key } from 'lucide-react';
+import { ArrowLeft, Bell, Moon, Trash2, Lock, Key, Clock, History, ChevronRight } from 'lucide-react';
 import { useMedications } from '../../context/MedicationContext';
 import { useEncryption } from '../../hooks/useEncryption';
 import { useAuth } from '../../context/AuthContext';
+import { useNotificationContext } from '../../context/NotificationContext';
 import './SubPage.css';
 
 const Settings = () => {
@@ -11,6 +12,8 @@ const Settings = () => {
     const { clearAllData } = useMedications();
     const { encryptionEnabled, enableEncryption, disableEncryption, masterPassword } = useEncryption();
     const { getCurrentUser } = useAuth();
+    const { getSnoozeHistory } = useNotificationContext();
+    const [showSnoozeHistory, setShowSnoozeHistory] = useState(false);
 
     // Load notifications state from localStorage
     const [notificationsEnabled, setNotificationsEnabled] = useState(() => {
@@ -157,7 +160,55 @@ const Settings = () => {
                             <p>Padrão (Bip)</p>
                         </div>
                     </div>
+                    <div className="setting-item" onClick={() => setShowSnoozeHistory(!showSnoozeHistory)}>
+                        <div className="setting-icon"><History size={20} /></div>
+                        <div className="setting-text">
+                            <h3>Histórico de Lembretes Adiados</h3>
+                            <p>{getSnoozeHistory().length} registro(s)</p>
+                        </div>
+                        <ChevronRight size={20} className="chevron" />
+                    </div>
                 </div>
+
+                {/* Histórico de Snoozes */}
+                {showSnoozeHistory && (
+                    <div className="section-group">
+                        <h2 className="group-title">Histórico de Adiamentos</h2>
+                        {getSnoozeHistory().length === 0 ? (
+                            <div style={{ padding: 16, textAlign: 'center', color: 'var(--color-text-secondary)' }}>
+                                <Clock size={32} style={{ marginBottom: 8, opacity: 0.5 }} />
+                                <p>Nenhum lembrete foi adiado ainda.</p>
+                            </div>
+                        ) : (
+                            <div style={{ maxHeight: 400, overflowY: 'auto' }}>
+                                {getSnoozeHistory()
+                                    .sort((a, b) => new Date(b.snoozedAt) - new Date(a.snoozedAt))
+                                    .slice(0, 50) // Limitar a 50 mais recentes
+                                    .map((entry, idx) => (
+                                        <div key={idx} style={{
+                                            padding: 12,
+                                            marginBottom: 8,
+                                            background: 'var(--color-surface)',
+                                            borderRadius: 8,
+                                            border: '1px solid var(--color-surface-dim)'
+                                        }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: 4 }}>
+                                                <h4 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--color-text-primary)' }}>
+                                                    {entry.medicationName}
+                                                </h4>
+                                                <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+                                                    {entry.snoozeCount}º adiamento
+                                                </span>
+                                            </div>
+                                            <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
+                                                Adiado por {entry.minutes} min em {new Date(entry.snoozedAt).toLocaleString('pt-BR')}
+                                            </p>
+                                        </div>
+                                    ))}
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 <div className="section-group">
                     <h2 className="group-title">Aparência</h2>
